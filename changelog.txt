@@ -1,0 +1,25 @@
+CINTEGRAGTION v 0.0.2
+
+v 0.0.2
+ + A bit better rights on server after FTP upload (Now users
+   able to delete cintegration directories from FTP)
+ + A bit better configuration for cintegration
+ + Ability to specify correct FTP_URL / IPA_URL was added
+ - HTTP_BASE parameter was removed
+ 
+   Old path's specification : 
+   
+   FTP_UPLOAD_DIR="/home/releases/"
+   HTTP_BASE="http://dev.stanfy.com/releases/"
+   IPA_URL="${HTTP_BASE}/${PROJECT_NAME}"
+   
+   New way:
+   
+   FTP_UPLOAD_DIR="/home/releases/${PROJECT_NAME}/ios/"
+   IPA_URL="http://dev.stanfy.com/releases/${PROJECT_NAME}/ios"
+ 
+ 
+
+v 0.0.1
+ * Base cintegration
+ * Seems work well :)

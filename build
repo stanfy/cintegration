@@ -1,0 +1,44 @@
+#!/bin/sh
+
+#  build-dev.sh
+#  AutomaticBuild
+#
+#  Created by Taykalo Paul on 8/3/11.
+#  Copyright 2011 Stanfy. All rights reserved.
+
+BUILD_NAME=$1
+
+if [ ! $BUILD_NAME ]; then
+  echo "Icorrect usage"
+  echo "Use this command in next format: "
+  echo "  build <built-type> "
+  echo " "
+  echo " Exampes :"
+  echo "   build dev"
+  echo "   build client"
+  echo "   build appstore"
+  exit 1
+fi
+
+
+start=$SECONDS
+
+chmod +x scripts/*.sh
+chmod +x scripts/*.py
+chmod 600 keys/integrator.key
+
+./scripts/archive.sh ${BUILD_NAME} $2
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
+
+./scripts/create-ipa.sh ${BUILD_NAME} $2
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
+
+
+./scripts/upload-to-ftp.sh ${BUILD_NAME} $2
+
+end=$SECONDS
+echo "Total build time: $((end - start)) secs."

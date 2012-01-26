@@ -1,0 +1,15 @@
+#!/bin/sh
+# determining from which directory script is executed
+DIR="$( cd -P "$( dirname "$0" )" && pwd )"
+
+# going to cintegration / bin directory
+cd ${DIR}/bin
+
+
+#calling correct profile
+#Change it to your profile
+# i.e
+# build appstore
+# build client
+# ...
+./build client
