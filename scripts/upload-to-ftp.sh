@@ -30,31 +30,6 @@ fi
 
 if [ ${FTP_UPLOAD_NEEDED} -gt "0" ]; then
 
-   # v0.1 support
-   # In older versions there was an HTTP_BASE variable
-   # If it set, we should add 
-   # If we have HTTP_BASE variable, then we should ADD additional
-   # Dir to fix FTP_UPLOAD_DIR and IPA_URL
-   if [ ! -z "${HTTP_BASE+xxx}" ]; then 
-      echo "[INFO]"
-      echo "[INFO] HTTP_BASE parameter found. cintegration v0.0.1 support enabled"
-      echo "[INFO]"
-      echo "[INFO] Old variables values : "
-      echo "[INFO]    FTP_UPLOAD_DIR         = ${FTP_UPLOAD_DIR}"
-      echo "[INFO]    IPA_URL                = ${IPA_URL}"
-      echo "[INFO]"
-
-      #By default old logic was to copy in this directory
-      FTP_UPLOAD_PROJECT_DIR="${PROJECT_NAME}/ios/"
-      FTP_UPLOAD_DIR="${FTP_UPLOAD_DIR}${FTP_UPLOAD_PROJECT_DIR}"
-
-      echo "[INFO] Fixed variables values : "
-      echo "[INFO]    FTP_UPLOAD_DIR         = ${FTP_UPLOAD_DIR}"
-      echo "[INFO]    IPA_URL                = ${IPA_URL}"
-   fi
-
-
-
    OUTPUT_PROJECT="../output/${PROJECT_NAME}"
    if [ -d "${OUTPUT_PROJECT}" ]; then
      rm -r "${OUTPUT_PROJECT}"
