@@ -3,7 +3,7 @@
 #  Script is runing from Jenkins.
 #
 #  Created by Alexander Tyschenko on 29/01/12.
-#  Copyright 2011 Stanfy. All rights reserved.
+#  Copyright 2012 Stanfy. All rights reserved.
 
 # determining from which directory script is executed
 DIR="$( cd -P "$( dirname "$0" )" && pwd )"
