@@ -11,6 +11,13 @@ DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 # going to cintegration / bin directory
 cd ${DIR}
 
+if [ $# -gt 0 ]
+then
+  INIT_TYPE=$1
+else
+  INIT_TYPE=''
+fi
+
 
 if [ "$BuildDev" == "true" ]; then
   ./build dev
