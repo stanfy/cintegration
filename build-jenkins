@@ -14,7 +14,8 @@ cd ${DIR}
 if [ $# -gt 0 ]
 then
   INIT_TYPE=$1
-  export $INIT_TYPE 
+  export $INIT_TYPE
+  echo $INIT_TYPE  
 #else
 #  INIT_TYPE=''
 fi
