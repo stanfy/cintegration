@@ -1,0 +1,1 @@
+#!/bin/shi=0plist_ver=$(find ../../.. -name *-Info.plist)while read line do  if [ $i -eq 1 ]  then    echo $line | sed 's/<string>//' | sed 's/<\/string>//'    break  fi  if [ `echo $line | grep "CFBundleVersion"` ]  then   i=1  fi done < $plist_ver
