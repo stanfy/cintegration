@@ -11,16 +11,19 @@ DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 # going to cintegration / bin directory
 cd ${DIR}
 
-echo ${JOB_NAME}
-
-if [ $# -gt 0 ]
+if [ echo ${JOB_NAME} | grep '\-auto'` ]
 then
-  INIT_TYPE=$1
-  export INIT_TYPE
-#else
+  INIT_TYPE='auto'
+else
+  INIT_TYPE='manual'
+# if [ $# -gt 0 ]
+# then
+#   INIT_TYPE=$1
+#   export INIT_TYPE
+# else
 #  INIT_TYPE=''
+# fi
 fi
-
 
 if [ "$BuildDev" == "true" ]; then
   ./build dev 
