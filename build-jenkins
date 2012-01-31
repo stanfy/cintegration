@@ -11,6 +11,8 @@ DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 # going to cintegration / bin directory
 cd ${DIR}
 
+echo ${JOB_NAME}
+
 if [ $# -gt 0 ]
 then
   INIT_TYPE=$1
