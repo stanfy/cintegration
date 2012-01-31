@@ -25,6 +25,8 @@ else
 # fi
 fi
 
+export INIT_TYPE
+
 if [ "$BuildDev" == "true" ]; then
   ./build dev 
 fi
