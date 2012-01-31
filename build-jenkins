@@ -11,7 +11,7 @@ DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 # going to cintegration / bin directory
 cd ${DIR}
 
-if [ echo ${JOB_NAME} | grep '\-auto'` ]
+if [ `echo ${JOB_NAME} | grep '\-auto'` ]
 then
   INIT_TYPE='auto'
 else
