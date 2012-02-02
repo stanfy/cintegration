@@ -13,3 +13,6 @@ cd ${DIR}/bin
 # build client
 # ...
 ./build dev
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
