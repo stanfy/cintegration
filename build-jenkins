@@ -21,7 +21,14 @@ fi
 
 if [ "$BuildDev" == "true" ]; then
   ./build dev 
+  if [ "$?" -ne "0" ]; then
+  exit 1
 fi
+fi
+
 if [ "$BuildClient" == "true" ]; then
   ./build client
+  if [ "$?" -ne "0" ]; then
+  exit 1
+fi
 fi
