@@ -39,6 +39,9 @@ fi
 
 
 ./scripts/upload-to-ftp.sh ${BUILD_NAME} $2
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
 
 end=$SECONDS
 echo "Total build time: $((end - start)) secs."
