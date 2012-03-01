@@ -24,5 +24,5 @@ then
 	fi
 
 	done <  "${list}"
-	fi
+fi
 	
