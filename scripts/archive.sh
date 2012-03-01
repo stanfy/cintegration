@@ -12,7 +12,7 @@ export BUILD_TYPE=$1
 
 echo
 echo -- PROJECT BUILDING --
-
+echo "vers -- $PROJECT_VERS"
 CFG_FILE=../configs/$1.cfg
 
 #Checking if config fil exists
