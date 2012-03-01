@@ -3,8 +3,9 @@
 str="CFBundleVersion"
 i=0
 
-list=$(find .. -iname "*-Info.plist" | egrep -iv "Libs|cintegration|Frameworks|test")
+list=$(find ../../.. -iname "*-Info.plist" | egrep -iv "Libs|cintegration|Frameworks|test")
 
+if [ -n "${list}" ]; then
 
 while read line
 do
@@ -22,3 +23,4 @@ if echo "$line" | grep -i "$str" >/dev/null; then
 fi
 
 done <  ${list}
+fi
