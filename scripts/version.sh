@@ -1,4 +1,4 @@
-﻿#!/bin/sh
+#!/bin/sh
 
 str="CFBundleVersion"
 i=0
