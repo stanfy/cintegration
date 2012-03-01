@@ -22,7 +22,7 @@ if [ ! -f "${CFG_FILE}" ]; then
 fi
 
 source ${CFG_FILE}
-echo "vers -- $PROJECT_VERS"
+#echo "vers -- $PROJECT_VERS"
 DEV_CFG_FILE=configs/$1-dev.cfg
   if [ -f ${DEV_CFG_FILE} ]; then
   echo Overriding ${CFG_FILE} with ${DEV_CFG_FILE}
