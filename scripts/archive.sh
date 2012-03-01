@@ -23,6 +23,8 @@ fi
 
 source ${CFG_FILE}
 
+echo "version -- $PROJECT_VERS"
+
 DEV_CFG_FILE=configs/$1-dev.cfg
   if [ -f ${DEV_CFG_FILE} ]; then
   echo Overriding ${CFG_FILE} with ${DEV_CFG_FILE}
@@ -56,8 +58,6 @@ PROFILE_UID=`grep -E "[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:aln
 echo [COPY] "${PROFILE_LOCATION}" --> "${PROFILE_HOME}/${PROFILE_NAME}"
 cp "${PROFILE_LOCATION}" "${PROFILE_HOME}/${PROFILE_NAME}"
 
-echo "version --- ${PROJECT_VERS}"
-
 cd ../..
 
 #remove old archives
@@ -77,8 +77,6 @@ if [ "${USER}" == "jenkins-ci" ]; then
   security list-keychains -s /Users/jenkins-ci/Library/Keychains/iPhone.keychain 
   security unlock-keychain -p integrator /Users/jenkins-ci/Library/Keychains/iPhone.keychain
 fi
-
-echo "$version_t"
 
 echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" 
 xcodebuild -verbose -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" > cintegration/output/build.log 2>&1
