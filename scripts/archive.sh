@@ -12,7 +12,7 @@ export BUILD_TYPE=$1
 
 echo
 echo -- PROJECT BUILDING --
-echo "vers -- $PROJECT_VERS"
+
 CFG_FILE=../configs/$1.cfg
 
 #Checking if config fil exists
@@ -22,7 +22,7 @@ if [ ! -f "${CFG_FILE}" ]; then
 fi
 
 source ${CFG_FILE}
-
+echo "vers -- $PROJECT_VERS"
 DEV_CFG_FILE=configs/$1-dev.cfg
   if [ -f ${DEV_CFG_FILE} ]; then
   echo Overriding ${CFG_FILE} with ${DEV_CFG_FILE}
