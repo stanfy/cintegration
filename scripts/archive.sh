@@ -23,8 +23,6 @@ fi
 
 source ${CFG_FILE}
 
-echo "vers --  ${PROJECT_VERS}" 
-
 DEV_CFG_FILE=configs/$1-dev.cfg
   if [ -f ${DEV_CFG_FILE} ]; then
   echo Overriding ${CFG_FILE} with ${DEV_CFG_FILE}
@@ -58,6 +56,7 @@ PROFILE_UID=`grep -E "[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:aln
 echo [COPY] "${PROFILE_LOCATION}" --> "${PROFILE_HOME}/${PROFILE_NAME}"
 cp "${PROFILE_LOCATION}" "${PROFILE_HOME}/${PROFILE_NAME}"
 
+echo "version --- ${PROJECT_VERS}"
 
 cd ../..
 
