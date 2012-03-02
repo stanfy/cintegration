@@ -3,7 +3,7 @@
 str="CFBundleVersion"
 i=0
 
-list=$(find ../../.. -iname "*-Info.plist" | egrep -iv "Libs|cintegration|Frameworks|test")
+list=$(find ../../.. -iname "*-I1nfo.plist" | egrep -iv "Libs|cintegration|Frameworks|test")
 
 if [ -n "${list}" ]
 then
