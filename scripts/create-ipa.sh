@@ -55,7 +55,7 @@ cp ${PROFILE_LOCATION} ../output/${PROFILE_DEST_NAME}
 #change to build
 DERIVED_DATA_PATH="$HOME/Library/Developer/Xcode/DerivedData"
 PROJ_GREP=`grep -oE "$WORKSPACE_NAME-([a-zA-Z0-9]+)[/]" ../output/build.log | head -n1`
-PROJECT_DERIVED_DATA_DIR=$(grep -oE "$WORKSPACE_NAME-([a-zA-Z0-9]+)[/]" ../output/build.log | perl -pe "s/\($WORKSPACE_NAME-[a-z]\{1,\}\)\//\1/i" | head -n1)
+PROJECT_DERIVED_DATA_DIR=$(grep -ioE "$WORKSPACE_NAME-([a-zA-Z0-9]+)[/]" ../output/build.log | perl -pe "s/\($WORKSPACE_NAME-[a-z]\{1,\}\)\//\1/i" | head -n1)
 PROJECT_DERIVED_DATA_PATH="$DERIVED_DATA_PATH/$PROJECT_DERIVED_DATA_DIR"
 APPLICATION_ARCHIVE_LOCATION=${PROJECT_DERIVED_DATA_PATH}/Build/Products/${CONFIGURATION}-iphoneos/${PROJECT_APP_FILE_NAME}.app
 echo [DEBUG] DERIVED_DATA_PATH = ${DERIVED_DATA_PATH}
