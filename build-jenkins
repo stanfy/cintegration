@@ -9,7 +9,7 @@
 DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 
 # going to cintegration / bin directory
-cd ${DIR}
+cd "${DIR}"
 
 if [ $# -gt 0 ]
 then

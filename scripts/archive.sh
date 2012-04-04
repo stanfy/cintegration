@@ -37,7 +37,7 @@ if [ -d "${OUTPUT_DIR}" ]; then
   rm -r "${OUTPUT_DIR}"
   echo [CLEAN] Removing old files from output dir
 fi
-mkdir ${OUTPUT_DIR}
+mkdir "${OUTPUT_DIR}"
 
 #system vars
 PROFILE_HOME=~/Library/MobileDevice/Provisioning\ Profiles/
@@ -91,7 +91,7 @@ if [ "$?" -ne "0" ]; then
 
 #  echo "[ERROR] ${PROJ_GREP}"
   echo "[ERROR] XCODE build failed. See output/build.log for error description"
-  tail -n250 ${OUTPUT_DIR}/build.log
+  tail -n250 "${OUTPUT_DIR}/build.log"
   exit 1
 fi
 
