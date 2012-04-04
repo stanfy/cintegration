@@ -43,7 +43,7 @@ fi
 #copy profile location to output
 PROFILE_LOCATION=`pwd`/../profiles/"${PROFILE_NAME}"
 echo "[COPY ] ${PROFILE_LOCATION} --> ../output/"
-cp ${PROFILE_LOCATION} ../output/${PROFILE_DEST_NAME}
+cp "${PROFILE_LOCATION}" "../output/${PROFILE_DEST_NAME}"
 
 #copy index.php
 #INDEX_PHP_LOCATION=`pwd`/scripts/index.php
@@ -57,28 +57,28 @@ DERIVED_DATA_PATH="$HOME/Library/Developer/Xcode/DerivedData"
 PROJ_GREP=`grep -oE "$WORKSPACE_NAME-([a-zA-Z0-9]+)[/]" ../output/build.log | head -n1`
 PROJECT_DERIVED_DATA_DIR=$(grep -oE "$WORKSPACE_NAME-([a-zA-Z0-9]+)[/]" ../output/build.log | sed -n "s/\($WORKSPACE_NAME-[a-z]\{1,\}\)\//\1/p" | head -n1)
 PROJECT_DERIVED_DATA_PATH="$DERIVED_DATA_PATH/$PROJECT_DERIVED_DATA_DIR"
-APPLICATION_ARCHIVE_LOCATION=${PROJECT_DERIVED_DATA_PATH}/Build/Products/${CONFIGURATION}-iphoneos/${PROJECT_APP_FILE_NAME}.app
-echo [DEBUG] DERIVED_DATA_PATH = ${DERIVED_DATA_PATH}
-echo [DEBUG] PROJECT_DERIVED_DATA_DIR = ${PROJECT_DERIVED_DATA_DIR}
-echo [DEBUG] PROJECT_DERIVED_DATA_PATH = ${PROJECT_DERIVED_DATA_PATH}
-echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = ${APPLICATION_ARCHIVE_LOCATION}
+APPLICATION_ARCHIVE_LOCATION="${PROJECT_DERIVED_DATA_PATH}/Build/Products/${CONFIGURATION}-iphoneos/${PROJECT_APP_FILE_NAME}.app"
+echo [DEBUG] DERIVED_DATA_PATH = "${DERIVED_DATA_PATH}"
+echo [DEBUG] PROJECT_DERIVED_DATA_DIR = "${PROJECT_DERIVED_DATA_DIR}"
+echo [DEBUG] PROJECT_DERIVED_DATA_PATH = "${PROJECT_DERIVED_DATA_PATH}"
+echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 
 
-if [[ ! -d ${PROJECT_DERIVED_DATA_PATH}/Build/Products/ ]]; then
+if [[ ! -d "${PROJECT_DERIVED_DATA_PATH}/Build/Products/" ]]; then
    echo "[WARN ] Not found Default Xcode derivedData location. seaching"
    PROJ_GREP=`grep -oE "/usr/bin/touch -c .*\.app" ../output/build.log | head -n1 | grep -oE " /.*\.app" | grep -oE "/.*"`
-   APPLICATION_ARCHIVE_LOCATION=${PROJ_GREP}
+   APPLICATION_ARCHIVE_LOCATION="${PROJ_GREP}"
    echo "[INFO ] found build dir at ${PROJ_GREP}"
    if [[ ! -d ${PROJ_GREP} ]]; then
       echo "[WARN ] Still not found .app file. Continue serch."
       PROJ_GREP=`grep -oE "setenv BUILD_DIR .*" ../output/build.log | head -n1 | grep -oE "/.*"`
       echo "[INFO ] found build dir at ${PROJ_GREP}"
-      APPLICATION_ARCHIVE_LOCATION=${PROJ_GREP}/${CONFIGURATION}-iphoneos/${PROJECT_APP_FILE_NAME}.app
-      echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = ${APPLICATION_ARCHIVE_LOCATION}
+      APPLICATION_ARCHIVE_LOCATION="${PROJ_GREP}/${CONFIGURATION}-iphoneos/${PROJECT_APP_FILE_NAME}.app"
+      echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
   fi
 fi
 
-if [ ! -d ${APPLICATION_ARCHIVE_LOCATION} ]; then
+if [ ! -d "${APPLICATION_ARCHIVE_LOCATION}" ]; then
   echo "[ERROR] No application archive at ${APPLICATION_ARCHIVE_LOCATION} :("
   echo "[ERROR] Make sure, that you correctly specified PROJECT_APP_FILE_NAME variable in cfg file"
   echo "[ERROR] Currently it has '${PROJECT_APP_FILE_NAME}' value"
@@ -91,8 +91,8 @@ echo -- IPA PACKAGING AND SIGNING --
 #ipa
 IPA_NAME=${PROJECT_DEST_NAME}.ipa
 IPA_ARCHIVE_LOCATION=`pwd`/../output/${IPA_NAME}
-IPA_FULL_URL=${IPA_URL}/${IPA_NAME}
-echo [DEBUG] IPA_ARCHIVE_LOCATION = ${IPA_ARCHIVE_LOCATION}
+IPA_FULL_URL="${IPA_URL}/${IPA_NAME}"
+echo [DEBUG] IPA_ARCHIVE_LOCATION = "${IPA_ARCHIVE_LOCATION}"
 
 #Correct developer dir location
 
@@ -106,7 +106,7 @@ echo "[SIGN ] OUTPUT  : ${IPA_ARCHIVE_LOCATION}"
 echo "[SIGN ] SIGNER  : ${SIGNING_IDENTITY}"
 echo "[SIGN ] PROFILE : ${PROFILE_LOCATION}"
 
-/usr/bin/perl "${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication" $2 "${APPLICATION_ARCHIVE_LOCATION}" -o "${IPA_ARCHIVE_LOCATION}" --sign "${SIGNING_IDENTITY}" --embed ${PROFILE_LOCATION}
+/usr/bin/perl "${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication" $2 "${APPLICATION_ARCHIVE_LOCATION}" -o "${IPA_ARCHIVE_LOCATION}" --sign "${SIGNING_IDENTITY}" --embed "${PROFILE_LOCATION}"
 
 if [ "$?" -ne "0" ]; then
   echo [ERROR] Codesign failed
@@ -119,7 +119,7 @@ echo
 echo -- DISTRIBUTION PLIST CREATION --
 
 #Getting Info.plist file location
-INFO_PLIST_LOCATION=${APPLICATION_ARCHIVE_LOCATION}/Info.plist
+INFO_PLIST_LOCATION="${APPLICATION_ARCHIVE_LOCATION}/Info.plist"
 echo [DEBUG] INFO_PLIST_LOCATION = ${INFO_PLIST_LOCATION}
 
 #CREATING PLIST FOR DISTRIBUTED BUILD
