@@ -63,6 +63,28 @@ echo [DEBUG] PROJECT_DERIVED_DATA_DIR = "${PROJECT_DERIVED_DATA_DIR}"
 echo [DEBUG] PROJECT_DERIVED_DATA_PATH = "${PROJECT_DERIVED_DATA_PATH}"
 echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 
+#resolving dsym location
+DWARF_DSYM_FOLDER_PATH=`grep -oE "setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]([[:graph:]]+)" ../output/build.log | tail -n1 | sed "s/setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]\([[:graph:]]\)/\1/"`
+DWARF_DSYM_FILE_NAME=`grep -oE "setenv[[:blank:]]DWARF_DSYM_FILE_NAME[[:blank:]]([[:graph:]]+)" ../output/build.log | tail -n1 | sed "s/setenv[[:blank:]]DWARF_DSYM_FILE_NAME[[:blank:]]\([[:graph:]]\)/\1/"`
+DSYM_LOCATION=${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
+
+if [[ ! -d "${DWARF_DSYM_FOLDER_PATH}" ]]; then
+   echo "[WARN ] Not found dsym folder path (${DWARF_DSYM_FOLDER_PATH}). This can be not good"
+else
+   echo
+   echo -- DWARF DSYM INFROMATION --
+   echo [DEBUG] DWARF_DSYM_FOLDER_PATH = "${DWARF_DSYM_FOLDER_PATH}"
+   echo [DEBUG] DWARF_DSYM_FILE_NAME = "${DWARF_DSYM_FILE_NAME}"
+   echo [DEBUG] DSYMLOCATION = "${DSYM_LOCATION}"
+#   echo
+#   echo [DEBUG] zipping DSYM file
+#   tar -pvczf ../output/${PROJECT_NAME}.tar.gz "${DSYM_LOCATION}"
+#   if [ "$?" -e "0" ]; then
+#      echo [DEBUG] Done
+#      echo
+#   fi
+fi
+
 
 if [[ ! -d "${PROJECT_DERIVED_DATA_PATH}/Build/Products/" ]]; then
    echo "[WARN ] Not found Default Xcode derivedData location. seaching"
