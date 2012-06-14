@@ -76,13 +76,13 @@ else
    echo [DEBUG] DWARF_DSYM_FOLDER_PATH = "${DWARF_DSYM_FOLDER_PATH}"
    echo [DEBUG] DWARF_DSYM_FILE_NAME = "${DWARF_DSYM_FILE_NAME}"
    echo [DEBUG] DSYMLOCATION = "${DSYM_LOCATION}"
-#   echo
-#   echo [DEBUG] zipping DSYM file
-#   tar -pvczf ../output/${PROJECT_NAME}.tar.gz "${DSYM_LOCATION}"
-#   if [ "$?" -e "0" ]; then
-#      echo [DEBUG] Done
-#      echo
-#   fi
+   echo
+   echo [DEBUG] zipping DSYM file
+   tar -pvczf ../output/${PROJECT_NAME}.tar.gz "${DSYM_LOCATION}"
+   if [ "$?" -e "0" ]; then
+      echo [DEBUG] Done
+      echo
+   fi
 fi
 
 
