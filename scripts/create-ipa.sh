@@ -63,8 +63,8 @@ echo [DEBUG] PROJECT_DERIVED_DATA_DIR = "${PROJECT_DERIVED_DATA_DIR}"
 echo [DEBUG] PROJECT_DERIVED_DATA_PATH = "${PROJECT_DERIVED_DATA_PATH}"
 echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 
-
-#if [ "$1" != "client" ]; then
+CHECK_FOR_CLIENT_BUILD=$(echo "$1" | grep -i "client")
+if [[ -z ${CHECK_FOR_CLIENT_BUILD} ]]; then
 
 	#resolving dsym location
 	DWARF_DSYM_FOLDER_PATH=`grep -oE "setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]([[:graph:]]+)" ../output/build.log | tail -n1 | sed "s/setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]\([[:graph:]]\)/\1/"`
@@ -81,8 +81,9 @@ echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 		echo
 		echo [DEBUG] zipping DSYM file
 		tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C "${DWARF_DSYM_FOLDER_PATH}" "${DWARF_DSYM_FILE_NAME}" && echo [DEBUG] Done
+		echo
 	fi
-#fi
+fi
 
 if [[ ! -d "${PROJECT_DERIVED_DATA_PATH}/Build/Products/" ]]; then
    echo "[WARN ] Not found Default Xcode derivedData location. seaching"
