@@ -78,7 +78,7 @@ else
    echo [DEBUG] DSYMLOCATION = "${DSYM_LOCATION}"
    echo
    echo [DEBUG] zipping DSYM file
-   tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz "${DSYM_LOCATION}"
+   tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz "${DSYM_LOCATION}" && echo [DEBUG] Done
 #   if [[ "$?" -e "0" ]]; then
 #      echo [DEBUG] Done
 #      echo
