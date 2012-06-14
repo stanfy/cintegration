@@ -66,7 +66,7 @@ echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 #resolving dsym location
 DWARF_DSYM_FOLDER_PATH=`grep -oE "setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]([[:graph:]]+)" ../output/build.log | tail -n1 | sed "s/setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]\([[:graph:]]\)/\1/"`
 DWARF_DSYM_FILE_NAME=`grep -oE "setenv[[:blank:]]DWARF_DSYM_FILE_NAME[[:blank:]]([[:graph:]]+)" ../output/build.log | tail -n1 | sed "s/setenv[[:blank:]]DWARF_DSYM_FILE_NAME[[:blank:]]\([[:graph:]]\)/\1/"`
-DSYM_LOCATION=${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
+#DSYM_LOCATION=${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
 
 if [[ ! -d "${DWARF_DSYM_FOLDER_PATH}" ]]; then
    echo "[WARN ] Not found dsym folder path (${DWARF_DSYM_FOLDER_PATH}). This can be not good"
@@ -78,11 +78,7 @@ else
    echo [DEBUG] DSYMLOCATION = "${DSYM_LOCATION}"
    echo
    echo [DEBUG] zipping DSYM file
-   tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz "${DSYM_LOCATION}" && echo [DEBUG] Done
-#   if [[ "$?" -e "0" ]]; then
-#      echo [DEBUG] Done
-#      echo
-#   fi
+   tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C ${DWARF_DSYM_FOLDER_PATH} ${DWARF_DSYM_FILE_NAME} && echo [DEBUG] Done
 fi
 
 
