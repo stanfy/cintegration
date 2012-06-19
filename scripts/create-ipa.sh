@@ -80,7 +80,7 @@ if [[ -z ${CHECK_FOR_CLIENT_BUILD} ]]; then
 		echo [DEBUG] parm = "$1"
 		echo
 		echo [DEBUG] zipping DSYM file
-		tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C "${DWARF_DSYM_FOLDER_PATH}" "${DWARF_DSYM_FILE_NAME}"
+		tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C "${DWARF_DSYM_FOLDER_PATH}" ${DWARF_DSYM_FILE_NAME}
 		
 		if [ "$?" -eq "0" ]; then
             echo
