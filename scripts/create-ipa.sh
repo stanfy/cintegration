@@ -80,8 +80,17 @@ if [[ -z ${CHECK_FOR_CLIENT_BUILD} ]]; then
 		echo [DEBUG] parm = "$1"
 		echo
 		echo [DEBUG] zipping DSYM file
-		tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C "${DWARF_DSYM_FOLDER_PATH}" "${DWARF_DSYM_FILE_NAME}" && echo [DEBUG] Done
-		echo
+		tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C "${DWARF_DSYM_FOLDER_PATH}" "${DWARF_DSYM_FILE_NAME}"
+		
+		if [ "$?" -eq "0" ]; then
+            echo
+            echo [DEBUG] Dsym is created
+        else
+            echo
+            echo [ERROR] Dsym creation failed
+            exit 1;
+        fi
+		
 	fi
 fi
 
