@@ -70,8 +70,11 @@ if [[ -z ${CHECK_FOR_CLIENT_BUILD} ]]; then
 	DWARF_DSYM_FOLDER_PATH=`grep -oE "setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]([[:graph:]]+)" ../output/build.log | tail -n1 | sed "s/setenv[[:blank:]]DWARF_DSYM_FOLDER_PATH[[:blank:]]\([[:graph:]]\)/\1/"`
 	DWARF_DSYM_FILE_NAME=$(ls ${DWARF_DSYM_FOLDER_PATH} | grep -i "\.dsym" | xargs )
     
-	if [[ ! -d "${DWARF_DSYM_FOLDER_PATH}" ]]; then
-		echo "[WARN ] Not found dsym folder path (${DWARF_DSYM_FOLDER_PATH}). This can't be good"
+    if [[ ! -d "${DWARF_DSYM_FOLDER_PATH}" || -z "$DWARF_DSYM_FILE_NAME" ]]; then
+        echo
+        echo "[WARN ] Not found dsym folder path (${DWARF_DSYM_FOLDER_PATH}) or dsym is unpresent. This can't be good"
+        echo
+
 	else
 		echo
 		echo -- DWARF DSYM INFROMATION --
