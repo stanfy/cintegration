@@ -54,7 +54,12 @@ if [ ${FTP_UPLOAD_NEEDED} -gt "0" ]; then
    #scp -r -P ${FTP_UPLOAD_PORT} -i "keys/integrator.key" ""${OUTPUT_PROJECT}/*"" "${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST}:${FTP_UPLOAD_DIR}/" > ../output/build.log 2>&1
 
    chmod -R g+w     "${OUTPUT_PROJECT}"
-
+   
+   CHECK_BIT=$(echo ${FTP_UPLOAD_DIR} | grep -o '/home/releases/')
+   if [[ -n $CHECK_BIT ]]; then
+		ssh -i keys/integrator.key "${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST} -p${FTP_UPLOAD_PORT}" "touch ${CHECK_BIT}check"
+   fi
+   
    rsync -vr "${OUTPUT_PROJECT}/" -e "ssh -p${FTP_UPLOAD_PORT} -i keys/integrator.key" "${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST}:${FTP_UPLOAD_DIR}/" >> ../output/build.log 2>&1
 
    if [ "$?" -ne "0" ]; then
