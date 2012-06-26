@@ -57,7 +57,7 @@ if [ ${FTP_UPLOAD_NEEDED} -gt "0" ]; then
    
    CHECK_BIT=$(echo ${FTP_UPLOAD_DIR} | grep -o '/home/releases/')
    if [[ -n $CHECK_BIT ]]; then
-		ssh -i keys/integrator.key "${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST} -p${FTP_UPLOAD_PORT}" "touch ${CHECK_BIT}check"
+		ssh -i keys/integrator.key ${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST} -p${FTP_UPLOAD_PORT} touch ${CHECK_BIT}check
    fi
    
    rsync -vr "${OUTPUT_PROJECT}/" -e "ssh -p${FTP_UPLOAD_PORT} -i keys/integrator.key" "${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST}:${FTP_UPLOAD_DIR}/" >> ../output/build.log 2>&1
