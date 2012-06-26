@@ -55,16 +55,17 @@ if [ ${FTP_UPLOAD_NEEDED} -gt "0" ]; then
 
    chmod -R g+w     "${OUTPUT_PROJECT}"
    
-   CHECK_BIT=$(echo ${FTP_UPLOAD_DIR} | grep -o '/home/releases/')
-   if [[ -n $CHECK_BIT ]]; then
-		ssh -i keys/integrator.key ${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST} -p${FTP_UPLOAD_PORT} touch ${CHECK_BIT}check
-   fi
-   
    rsync -vr "${OUTPUT_PROJECT}/" -e "ssh -p${FTP_UPLOAD_PORT} -i keys/integrator.key" "${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST}:${FTP_UPLOAD_DIR}/" >> ../output/build.log 2>&1
 
    if [ "$?" -ne "0" ]; then
       echo [ERROR] FTP UPLOAD failed
       exit 1;
+   else
+      CHECK_BIT=$(echo ${FTP_UPLOAD_DIR} | grep -o '/home/releases/')
+      if [[ -n $CHECK_BIT ]]; then
+		  ssh -i keys/integrator.key ${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST} -p${FTP_UPLOAD_PORT} touch ${CHECK_BIT}check
+		  echo "[INFO] CHECK_BIT is setted" 
+      fi
    fi
 
    echo "[SUCCESS]"
