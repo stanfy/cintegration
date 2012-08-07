@@ -28,7 +28,7 @@ source ${DEV_CFG_FILE}
 fi
 
 
-if [ ${FTP_UPLOAD_NEEDED} -gt "0" ]; then
+if [ "${INIT_TYPE}" != "auto" -a ${FTP_UPLOAD_NEEDED} -gt "0" ]; then
 
    OUTPUT_PROJECT="../output/${PROJECT_NAME}"
    if [ -d "${OUTPUT_PROJECT}" ]; then
