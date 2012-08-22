@@ -76,7 +76,22 @@ else
   echo
 fi
 
-### Rename ipa
 
-find ../output/ -d 1 -iname '*.ipa' -exec mv {} "../output/${PROJECT_NAME}".ipa \;
+# TESTFLIGHT UPLOAD
+if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" -a -n "${TEAM_TOKEN}" -a -n "${API_TOKEN}" -a -n "${DIST_LIST}" ]
+  then
+	echo "[INFO] Testflight upload"
+	IPA_FILE=$(find ./output -d 1 -iname '*.ipa')
+	/usr/bin/curl "http://testflightapp.com/api/builds.json" -F file=@"${IPA_FILE}" -F api_token="${API_TOKEN}" -F team_token="${TEAM_TOKEN}" -F notes="Build uploaded automatically from Jenkins." -F notify=True -F distribution_lists="${DIST_LIST}"
+	
+	if [ "$?" -ne "0" ]; then
+      echo "[ERROR] Testflight UPLOAD failed"
+      exit 1;
+  else
+      echo "[ERROR] Missing some parameters"
+	  exit 1;
+fi
+
+
+#find ../output/ -d 1 -iname '*.ipa' -exec mv {} "../output/${PROJECT_NAME}".ipa \;
 
