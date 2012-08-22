@@ -78,7 +78,8 @@ fi
 
 
 # TESTFLIGHT UPLOAD
-if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" -a -n "${TEAM_TOKEN}" -a -n "${API_TOKEN}" -a -n "${DIST_LIST}" ]
+if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
+  if [ -n "${TEAM_TOKEN}" -a -n "${API_TOKEN}" -a -n "${DIST_LIST}" ]
   then
 	echo "[INFO] Testflight upload"
 	IPA_FILE=$(find ./output -d 1 -iname '*.ipa')
@@ -86,10 +87,11 @@ if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" -a -n "${TEAM_TOKEN}" -a -n "${API_T
 	
 	if [ "$?" -ne "0" ]; then
       echo "[ERROR] Testflight UPLOAD failed"
-      exit 1;
+      exit 1
   else
       echo "[ERROR] Missing some parameters"
-	  exit 1;
+	  exit 1
+  fi
 fi
 
 
