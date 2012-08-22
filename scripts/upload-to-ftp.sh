@@ -83,7 +83,7 @@ if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
   if [ -n "${TEAM_TOKEN}" -a -n "${API_TOKEN}" -a -n "${DIST_LIST}" ]
   then
 	
-	IPA_FILE=$(find ./output -d 1 -iname '*.ipa')
+	IPA_FILE=$(find ../output -d 1 -iname '*.ipa')
 	echo "IPA_FILE  $IPA_FILE"
 	/usr/bin/curl "http://testflightapp.com/api/builds.json" -F file=@"${IPA_FILE}" -F api_token="${API_TOKEN}" -F team_token="${TEAM_TOKEN}" -F notes="Build uploaded automatically from Jenkins." -F notify=True -F distribution_lists="${DIST_LIST}"
 	
