@@ -69,9 +69,11 @@ if [ "${INIT_TYPE}" != "auto" -a ${FTP_UPLOAD_NEEDED} -gt "0" ]; then
    fi
 
    echo "[SUCCESS]"
+   echo
 
 else
   echo "[SKIP ] Uploading skipped. This option can be enabled by setting 'FTP_UPLOAD_NEEDED' variable in cfg.file"
+  echo
 fi
 
 ### Rename ipa
