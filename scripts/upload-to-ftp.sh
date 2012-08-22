@@ -88,6 +88,7 @@ if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
 	if [ "$?" -ne "0" ]; then
       echo "[ERROR] Testflight UPLOAD failed"
       exit 1
+	fi  
   else
       echo "[ERROR] Missing some parameters"
 	  exit 1
