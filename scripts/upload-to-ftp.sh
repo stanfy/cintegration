@@ -84,8 +84,9 @@ if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
   then
 	
 	IPA_FILE=$(find ../output -d 1 -iname '*.ipa')
-	echo "IPA_FILE  $IPA_FILE"
+	#echo "IPA_FILE  $IPA_FILE"
 	/usr/bin/curl "http://testflightapp.com/api/builds.json" -F file=@"${IPA_FILE}" -F api_token="${API_TOKEN}" -F team_token="${TEAM_TOKEN}" -F notes="Build uploaded automatically from Jenkins." -F notify=True -F distribution_lists="${DIST_LIST}"
+	echo
 	
 	if [ "$?" -ne "0" ]; then
       echo "[ERROR] Testflight UPLOAD failed"
@@ -97,6 +98,4 @@ if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
   fi
 fi
 
-
-#find ../output/ -d 1 -iname '*.ipa' -exec mv {} "../output/${PROJECT_NAME}".ipa \;
 
