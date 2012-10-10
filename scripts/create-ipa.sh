@@ -122,9 +122,22 @@ echo
 echo -- GETTING icon.png --
 ICON_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon.png')
 ICON2_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon@2x.png')
-cp "$ICON_PATH" "$(pwd)/../output/icon.png" && echo "[DEBUG] icon.png was copied"
-cp "$ICON2_PATH" "$(pwd)/../output/icon@2x.png" && echo "[DEBUG] icon@2x.png was copied"
-echo
+if [ -n "$ICON_PATH" ]
+then 
+	cp "$ICON_PATH" "$(pwd)/../output/icon.png"
+	echo '[INFO] icon.png was copied'
+else
+	echo '[INFO] icon.png was not found'
+fi
+
+if [ -n "$ICON2_PATH" ]
+then 
+	cp "$ICON2_PATH" "$(pwd)/../output/icon@2x.png"
+	echo '[INFO] icon@2x.png was copied'
+else
+	echo '[INFO] icon@2x.png was not found'
+fi
+
 
 
 echo 
