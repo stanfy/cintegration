@@ -122,14 +122,9 @@ echo
 echo -- GETTING icon.png --
 ICON_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon.png')
 ICON2_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon@2x.png')
-echo $ICON_PATH
-echo  $ICON2_PATH
-cp "$ICON_PATH" "$(pwd)/../output/icon.png"
-cp "$ICON2_PATH" "$(pwd)/../output/icon@2x.png"
-#ipa
-#IPA_NAME=${PROJECT_DEST_NAME}.ipa
-#IPA_ARCHIVE_LOCATION=`pwd`/../output/${IPA_NAME}
-#IPA_FULL_URL="${IPA_URL}/${IPA_NAME}"
+cp "$ICON_PATH" "$(pwd)/../output/icon.png" && echo "[DEBUG] icon.png was copied"
+cp "$ICON2_PATH" "$(pwd)/../output/icon@2x.png" && echo "[DEBUG] icon@2x.png was copied"
+echo
 
 
 echo 
