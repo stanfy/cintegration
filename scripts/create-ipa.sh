@@ -132,7 +132,7 @@ fi
 
 if [ -n "$ICON2_PATH" ]
 then 
-	cp "$ICON2_PATH" "$(pwd)/../output/icon@2x.png"
+	cp "$ICON2_PATH" "$(pwd)/../output/icon2.png"
 	echo '[INFO] icon@2x.png was copied'
 else
 	echo '[INFO] icon@2x.png was not found'
