@@ -127,7 +127,7 @@ ICONS_ARR="${NEW_ICONS}${NEW_ICONS}"
 ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
 
 
-while read line
+echo "$ICONS_ARR" | while read line
 do
    tmp=''
    tmp=$(echo "$line" | grep -i '@2x\.')
@@ -140,7 +140,7 @@ do
 		echo '[INFO] icon2.png was copied'
    fi
    
-done < <(echo "$ICONS_ARR")
+done
 
 #ICON_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon.png')
 #ICON2_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon@2x.png')
