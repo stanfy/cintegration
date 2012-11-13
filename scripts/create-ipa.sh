@@ -120,23 +120,45 @@ fi
 
 echo 
 echo -- GETTING icon.png --
-ICON_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon.png')
-ICON2_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon@2x.png')
-if [ -n "$ICON_PATH" ]
-then 
-	cp "$ICON_PATH" "$(pwd)/../output/icon.png"
-	echo '[INFO] icon.png was copied'
-else
-	echo '[INFO] icon.png was not found'
-fi
+NEW_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles" Info.plist 2>/dev/null)
+OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" Info.plist 2> /dev/null)
 
-if [ -n "$ICON2_PATH" ]
-then 
-	cp "$ICON2_PATH" "$(pwd)/../output/icon2.png"
-	echo '[INFO] icon@2x.png was copied'
-else
-	echo '[INFO] icon@2x.png was not found'
-fi
+ICONS_ARR="${NEW_ICONS}${NEW_ICONS}"
+ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
+
+
+while read line
+do
+   tmp=''
+   tmp=$(echo "$line" | grep -i '@2x\.')
+   if [ -z "$tmp" ]
+   then
+		cp "${APPLICATION_ARCHIVE_LOCATION}/$line" "$(pwd)/../output/icon.png"
+		echo '[INFO] icon.png was copied'
+   else
+		cp "${APPLICATION_ARCHIVE_LOCATION}/$line" "$(pwd)/../output/icon2.png"
+		echo '[INFO] icon2.png was copied'
+   fi
+   
+done < <(echo "$ICONS_ARR")
+
+#ICON_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon.png')
+#ICON2_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon@2x.png')
+#if [ -n "$ICON_PATH" ]
+#then 
+#	cp "$ICON_PATH" "$(pwd)/../output/icon.png"
+#	echo '[INFO] icon.png was copied'
+#else
+#	echo '[INFO] icon.png was not found'
+#fi
+
+#if [ -n "$ICON2_PATH" ]
+#then 
+#	cp "$ICON2_PATH" "$(pwd)/../output/icon2.png"
+#	echo '[INFO] icon@2x.png was copied'
+#else
+#	echo '[INFO] icon@2x.png was not found'
+#fi
 
 
 
