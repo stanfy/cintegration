@@ -124,10 +124,11 @@ OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" Info.plist 2> 
 
 ICONS_ARR="${NEW_ICONS}${NEW_ICONS}"
 ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
+echo "$ICONS_ARR"
 
 if [ -n "$ICONS_ARR" ]
 then
-  echo -- GETTING icons --
+  echo --- GETTING icons ---
   echo "$ICONS_ARR" | while read line
   do
      tmp=''
