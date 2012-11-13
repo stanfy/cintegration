@@ -123,8 +123,9 @@ NEW_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIcons:CFBundlePrimaryIcon
 OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" Info.plist 2> /dev/null)
 
 ICONS_ARR="${NEW_ICONS}${NEW_ICONS}"
+echo "-$ICONS_ARR-"
 ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
-echo "$ICONS_ARR"
+echo "--$ICONS_ARR--"
 
 if [ -n "$ICONS_ARR" ]
 then
