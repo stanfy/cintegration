@@ -119,13 +119,11 @@ if [ ! -d "${APPLICATION_ARCHIVE_LOCATION}" ]; then
 fi
 
 echo 
-NEW_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles" Info.plist 2>/dev/null)
-OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" Info.plist 2> /dev/null)
+NEW_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles" "${APPLICATION_ARCHIVE_LOCATION}/Info.plist" 2>/dev/null)
+OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" "${APPLICATION_ARCHIVE_LOCATION}/Info.plist" 2> /dev/null)
 
 ICONS_ARR="${NEW_ICONS}${NEW_ICONS}"
-echo "-$ICONS_ARR-"
 ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
-echo "--$ICONS_ARR--"
 
 if [ -n "$ICONS_ARR" ]
 then
