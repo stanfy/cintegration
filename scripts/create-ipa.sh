@@ -128,20 +128,25 @@ ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
 if [ -n "$ICONS_ARR" ]
 then
   echo --- GETTING icons ---
-  echo "$ICONS_ARR" | while read line
-  do
-     tmp=''
-     tmp=$(echo "$line" | grep -i '@2x\.')
-     if [ -z "$tmp" ]
+  
+  icon2=$(echo "$line" | grep -i '@2x\.')
+  icon=$(echo "$icon2"| sed 's/@2x//')
+
+  
+  if [ -f "${APPLICATION_ARCHIVE_LOCATION}/$icon" ]
      then
 		cp "${APPLICATION_ARCHIVE_LOCATION}/$line" "$(pwd)/../output/icon.png"
-		echo '[INFO] icon.png was copied'
-     else
-		cp "${APPLICATION_ARCHIVE_LOCATION}/$line" "$(pwd)/../output/icon2.png"
-		echo '[INFO] icon2.png was copied'
+		echo "[INFO] $icon was copied to icon.png"
      fi
-  done
+  
+  if [ -f "${APPLICATION_ARCHIVE_LOCATION}/$icon2" ]
+     then
+		cp "${APPLICATION_ARCHIVE_LOCATION}/$icon2" "$(pwd)/../output/icon2.png"
+		echo "[INFO] $icon2 was copied to icon2.png"
+     fi
+		
 else
+
  echo -- GETTING icons --
  ICON_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon.png')
  ICON2_PATH=$(find ${APPLICATION_ARCHIVE_LOCATION} -maxdepth 1 -iname 'icon@2x.png')
