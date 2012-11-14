@@ -129,7 +129,7 @@ if [ -n "$ICONS_ARR" ]
 then
   echo --- GETTING icons ---
   
-  icon2=$(echo "$line" | grep -i '@2x\.')
+  icon2=$(echo "$ICONS_ARR" | grep -i '@2x\.')
   icon=$(echo "$icon2"| sed 's/@2x//')
 
   
