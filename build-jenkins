@@ -19,7 +19,6 @@ then
 	echo "-- PODS INSTALLING --"
 	cd "$podfile"
 	pod install
-	echo 
 fi
 
 
