@@ -8,6 +8,21 @@
 # determining from which directory script is executed
 DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 
+
+#install pods
+
+podfile=$(find . -name Podfile -maxdepth 2 | xargs dirname)
+
+if [ -n "$podfile" ]
+then 
+	echo 
+	echo "[INFO] Pods installing"
+	cd "$podfile"
+	pod install
+	echo 
+fi
+
+
 # going to cintegration / bin directory
 cd "${DIR}"
 
