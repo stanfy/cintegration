@@ -18,7 +18,7 @@ then
 	echo 
 	echo "-- PODS INSTALLING --"
 	cd "$podfile"
-	pod install
+	pod install --no-color
 	echo
 fi
 
