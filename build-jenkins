@@ -13,21 +13,20 @@ DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 
 if [ "_$CleanProject" = "_true" ]
 then
+  echo
   echo "-- PROJECT CLEANING --"
   echo
   DERIVEDDATA_DIR=$(grep -oE "/usr/bin/touch -c .*\.app" "$DIR/../output/build.log" | head -n1 | sed -e 's/.*\ \(.*\)\/Build\/.*/\1/')
   if [ -d "$DERIVEDDATA_DIR" ]
   then
-    rm -r "DERIVEDDATA_DIR"
+    rm -rf "$DERIVEDDATA_DIR"
     echo "[DEBUG] DerivedData $DERIVEDDATA_DIR is removed"
   else
     echo "[WARNING] DerivedData $DERIVEDDATA_DIR is missed"   
   fi
   
   echo
-  #find . -exec rm -rf {} \; 2> /dev/null
-  ls -las
-  pwd
+  find . -exec rm -rf {} \; 2> /dev/null
   echo "[DEBUG] Workspace $WORKSPACE is removed"
   exit
   
