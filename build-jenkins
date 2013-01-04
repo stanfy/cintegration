@@ -28,6 +28,7 @@ then
   echo
   find . -exec rm -rf {} \; 2> /dev/null
   echo "[DEBUG] Workspace $WORKSPACE is removed"
+  echo
   exit
   
 fi
