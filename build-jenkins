@@ -16,14 +16,16 @@ then
   echo
   echo "-- PROJECT CLEANING --"
   echo
-  DERIVEDDATA_DIR=$(grep -oE "/usr/bin/touch -c .*\.app" "$DIR/../output/build.log" | head -n1 | sed -e 's/.*\ \(.*\)\/Build\/.*/\1/' 2> /dev/null)
+  DERIVEDDATA_DIR=$(grep -oE "/usr/bin/touch -c .*\.app" "$DIR/../output/build.log"  2> /dev/null| head -n1 | sed -e 's/.*\ \(.*\)\/Build\/.*/\1/')
   if [ -d "$DERIVEDDATA_DIR" ]
   then
     rm -rf "$DERIVEDDATA_DIR"
     echo "[DEBUG] DerivedData $DERIVEDDATA_DIR is removed"
   else
     echo "[ERROR] DerivedData dir $DERIVEDDATA_DIR is not found"
+    echo
     echo "[INFO] First build project and then you may clean it"
+    echo
     exit 1
   fi
   
