@@ -39,13 +39,21 @@ fi
 
 # install pods
 
-podfile=$(find . -name Podfile -maxdepth 2 | xargs dirname)
+podfile=$(find . -name Podfile -maxdepth 2 )
 
-if [ -n "$podfile" ]
+podfile_dir=$(echo "$podfile" | xargs dirname)
+
+mod_time=$(stat -f %m "$podfile")
+
+now_time=$(date +%s)
+
+let "diff_time = $now_time - $mod_time" 
+
+if [ $diff_time -lt 60 ]
 then 
 	echo 
 	echo "-- PODS INSTALLING --"
-	cd "$podfile"
+	cd "$podfile_dir"
 	pod install --no-color
 	echo
 fi
