@@ -37,28 +37,6 @@ then
   
 fi
 
-# install pods
-
-podfile=$(find . -name Podfile -maxdepth 2 )
-
-podfile_dir=$(echo "$podfile" | xargs dirname)
-
-mod_time=$(stat -f %m "$podfile")
-
-now_time=$(date +%s)
-
-let "diff_time = $now_time - $mod_time" 
-
-if [ $diff_time -lt 60 ]
-then 
-	echo 
-	echo "-- PODS INSTALLING --"
-	cd "$podfile_dir"
-	pod install --no-color
-	echo
-fi
-
-
 # going to cintegration / bin directory
 cd "${DIR}"
 
@@ -68,6 +46,8 @@ then
   export INIT_TYPE
 fi
 
+# install pods
+./scripts/pods.sh
 
 
 if [ "$BuildDev" == "true" ]; then
