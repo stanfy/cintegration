@@ -37,6 +37,10 @@ then
   
 fi
 
+
+# install pods
+"${DIR}/scripts/pods.sh"
+
 # going to cintegration / bin directory
 cd "${DIR}"
 
@@ -45,10 +49,6 @@ then
   INIT_TYPE=$1
   export INIT_TYPE
 fi
-
-# install pods
-./scripts/pods.sh
-
 
 if [ "$BuildDev" == "true" ]; then
   ./build dev 
