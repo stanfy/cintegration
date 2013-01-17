@@ -8,9 +8,11 @@
 # determining from which directory script is executed
 DIR="$( cd -P "$( dirname "$0" )" && pwd )"
 
+# if build-jenkins uses outside bin/ dir then uncomment string below
+
+#DIR=$("$DIR/bin")
+
 # clean DerivedData and Workspace
-
-
 if [ "_$CleanProject" = "_true" ]
 then
   echo
