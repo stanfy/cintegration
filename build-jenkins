@@ -24,11 +24,10 @@ then
     rm -rf "$DERIVEDDATA_DIR"
     echo "[DEBUG] DerivedData $DERIVEDDATA_DIR is removed"
   else
-    echo "[ERROR] DerivedData dir $DERIVEDDATA_DIR is not found"
+    echo "[WARNING] DerivedData dir $DERIVEDDATA_DIR is not found"
     echo
-    echo "[INFO] First build project and then you may clean it"
+    echo "[INFO] First build project and then you may clean DerivedData"
     echo
-    exit 1
   fi
   
   echo
