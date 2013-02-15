@@ -83,7 +83,7 @@ if [[ -z ${CHECK_FOR_CLIENT_BUILD} ]]; then
 		echo [DEBUG] parm = "$1"
 		echo
 		echo [DEBUG] zipping DSYM file
-		tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C "${DWARF_DSYM_FOLDER_PATH}" ${DWARF_DSYM_FILE_NAME}
+		tar -pvczf ../output/${PROJECT_DEST_NAME}.tar.gz  -C "${DWARF_DSYM_FOLDER_PATH}" "${DWARF_DSYM_FILE_NAME}"
 		
 		if [ "$?" -eq "0" ]; then
             echo
@@ -99,11 +99,11 @@ fi
 
 if [[ ! -d "${PROJECT_DERIVED_DATA_PATH}/Build/Products/" ]]; then
    echo "[WARN ] Not found Default Xcode derivedData location. seaching"
-   PROJ_GREP=`grep -oE "/usr/bin/touch -c .*\.app" ../output/build.log | head -n1 | grep -oE " /.*\.app" | grep -oE "/.*"`
+   PROJ_GREP=`grep -oE "/usr/bin/touch -c .*\.app" ../output/build.log | head -n1 | sed 's/^.*-c\ \"\(.*\.app\)$/\1/'`
    APPLICATION_ARCHIVE_LOCATION="${PROJ_GREP}"
    echo "[INFO ] found build dir at ${PROJ_GREP}"
    if [[ ! -d ${PROJ_GREP} ]]; then
-      echo "[WARN ] Still not found .app file. Continue serch."
+      echo "[WARN ] Still not found .app file. Continue searching..."
       PROJ_GREP=`grep -oE "setenv BUILD_DIR .*" ../output/build.log | head -n1 | grep -oE "/.*"`
       echo "[INFO ] found build dir at ${PROJ_GREP}"
       APPLICATION_ARCHIVE_LOCATION="${PROJ_GREP}/${CONFIGURATION}-iphoneos/${PROJECT_APP_FILE_NAME}.app"
