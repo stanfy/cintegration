@@ -99,7 +99,7 @@ fi
 
 if [[ ! -d "${PROJECT_DERIVED_DATA_PATH}/Build/Products/" ]]; then
    echo "[WARN ] Not found Default Xcode derivedData location. seaching"
-   PROJ_GREP=`grep -oE "/usr/bin/touch -c .*\.app" ../output/build.log | head -n1 | sed 's/^.*-c\ \"\(.*\.app\)$/\1/'`
+   PROJ_GREP=`grep -oE "/usr/bin/touch -c .*\.app" ../output/build.log | head -n1 | sed 's/^.*-c\ \(.*\.app\)$/\1/'`
    APPLICATION_ARCHIVE_LOCATION="${PROJ_GREP}"
    echo "[INFO ] found build dir at ${PROJ_GREP}"
    if [ ! -d "${PROJ_GREP}" ]; then
