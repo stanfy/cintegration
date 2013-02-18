@@ -102,7 +102,7 @@ if [[ ! -d "${PROJECT_DERIVED_DATA_PATH}/Build/Products/" ]]; then
    PROJ_GREP=`grep -oE "/usr/bin/touch -c .*\.app" ../output/build.log | head -n1 | sed 's/^.*-c\ \"\(.*\.app\)$/\1/'`
    APPLICATION_ARCHIVE_LOCATION="${PROJ_GREP}"
    echo "[INFO ] found build dir at ${PROJ_GREP}"
-   if [[ ! -d ${PROJ_GREP} ]]; then
+   if [ ! -d "${PROJ_GREP}" ]; then
       echo "[WARN ] Still not found .app file. Continue searching..."
       PROJ_GREP=`grep -oE "setenv BUILD_DIR .*" ../output/build.log | head -n1 | grep -oE "/.*"`
       echo "[INFO ] found build dir at ${PROJ_GREP}"
