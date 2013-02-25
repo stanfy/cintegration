@@ -137,6 +137,7 @@ then
   do
   	SIZE_ICONS=''
         SIZE_ICONS=$(usr/bin/stat -f "%N %z" "${APPLICATION_ARCHIVE_LOCATION}/$ICONS_ARR" 2> /dev/null)
+        echo "size $SIZE_ICONS"
         SORT_ICONS=$(printf "%s\n%s" "$SORT_ICONS" "$SIZE_ICONS")
   done
                                  
