@@ -122,26 +122,37 @@ echo
 NEW_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIcons:CFBundlePrimaryIcon:CFBundleIconFiles" "${APPLICATION_ARCHIVE_LOCATION}/Info.plist" 2>/dev/null)
 OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" "${APPLICATION_ARCHIVE_LOCATION}/Info.plist" 2> /dev/null)
 
-ICONS_ARR="${NEW_ICONS}${NEW_ICONS}"
+ICONS_ARR="${NEW_ICONS}${OLD_ICONS}"
 ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
 
 if [ -n "$ICONS_ARR" ]
 then
-  echo --- GETTING icons ---
+  echo --- GETTING icons from plist ---
   
-  icon2=$(echo "$ICONS_ARR" | grep -i '@2x\.')
-  icon=$(echo "$icon2"| sed 's/@2x//')
+  SORT_ICONS=''
+  for raw in "$ICONS_ARR"
+  do
+  	SIZE_ICONS=''
+        SIZE_ICONS=$(usr/bin/stat -f "%N %z" "${APPLICATION_ARCHIVE_LOCATION}/$ICONS_ARR" 2> /dev/null)
+        SORT_ICONS=$(printf "%s\n%s" "$SORT_ICONS" "$SIZE_ICONS")
+  done
+                                 
+  SORT_ICONS=$(echo "$SORT_ICONS"| sort -nrk 2 | awk '{print $1}')
+                                   
+  icon2=$(echo "$SORT_ICONS" | sed -n 1p)
+  icon=$(echo "$SORT_ICONS" | sed -n 2p)
+                                       
 
   
-  if [ -f "${APPLICATION_ARCHIVE_LOCATION}/$icon" ]
+  if [ -f "$icon" ]
      then
-		cp "${APPLICATION_ARCHIVE_LOCATION}/$line" "$(pwd)/../output/icon.png"
+		cp "$icon" "$(pwd)/../output/icon.png"
 		echo "[INFO] $icon was copied to icon.png"
      fi
   
-  if [ -f "${APPLICATION_ARCHIVE_LOCATION}/$icon2" ]
+  if [ -f "$icon2" ]
      then
-		cp "${APPLICATION_ARCHIVE_LOCATION}/$icon2" "$(pwd)/../output/icon2.png"
+		cp "$icon2" "$(pwd)/../output/icon2.png"
 		echo "[INFO] $icon2 was copied to icon2.png"
      fi
 		
