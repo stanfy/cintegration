@@ -130,24 +130,18 @@ then
   echo --- GETTING icons from plist ---
   
   SORT_ICONS=''
-  for raw in "$ICONS_ARR"
+  while read raw
   do
   	SIZE_ICONS=''
         SIZE_ICONS=$(usr/bin/stat -f "%N %z" "${APPLICATION_ARCHIVE_LOCATION}/$raw" 2> /dev/null)
-        echo "size $SIZE_ICONS"
         SORT_ICONS=$(printf "%s\n%s" "$SORT_ICONS" "$SIZE_ICONS")
-  done
+  done <<< "`echo "$ICONS_ARR"`"
                                  
   SORT_ICONS=$(echo "$SORT_ICONS"| sort -nrk 2 | awk '{print $1}')
   
-  echo "sort $SORT_ICONS" 
-                                   
   icon2=$(echo "$SORT_ICONS" | sed -n 1p)
   icon=$(echo "$SORT_ICONS" | sed -n 2p)
                          
-  echo "icons $icon  $icon2"                                     
-
-  
   if [ -f "$icon" ]
      then
 		cp "$icon" "$(pwd)/../output/icon.png"
