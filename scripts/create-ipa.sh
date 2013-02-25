@@ -125,6 +125,9 @@ OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" "${APPLICATION
 ICONS_ARR="${NEW_ICONS}${OLD_ICONS}"
 ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
 
+echo "$ICONS_ARR"
+echo
+
 if [ -n "$ICONS_ARR" ]
 then
   echo --- GETTING icons from plist ---
@@ -138,10 +141,13 @@ then
   done
                                  
   SORT_ICONS=$(echo "$SORT_ICONS"| sort -nrk 2 | awk '{print $1}')
+  
+  echo "sort $SORT_ICONS" 
                                    
   icon2=$(echo "$SORT_ICONS" | sed -n 1p)
   icon=$(echo "$SORT_ICONS" | sed -n 2p)
-                                       
+                         
+  echo "icons $icon  $icon2"                                     
 
   
   if [ -f "$icon" ]
