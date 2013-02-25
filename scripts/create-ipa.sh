@@ -125,9 +125,6 @@ OLD_ICONS=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIconFiles" "${APPLICATION
 ICONS_ARR="${NEW_ICONS}${OLD_ICONS}"
 ICONS_ARR=$(echo "$ICONS_ARR" | grep -i '\.png' | sort -u | sed 's/\ //g')
 
-echo "$ICONS_ARR"
-echo
-
 if [ -n "$ICONS_ARR" ]
 then
   echo --- GETTING icons from plist ---
@@ -136,7 +133,7 @@ then
   for raw in "$ICONS_ARR"
   do
   	SIZE_ICONS=''
-        SIZE_ICONS=$(usr/bin/stat -f "%N %z" "${APPLICATION_ARCHIVE_LOCATION}/$ICONS_ARR" 2> /dev/null)
+        SIZE_ICONS=$(usr/bin/stat -f "%N %z" "${APPLICATION_ARCHIVE_LOCATION}/$raw" 2> /dev/null)
         echo "size $SIZE_ICONS"
         SORT_ICONS=$(printf "%s\n%s" "$SORT_ICONS" "$SIZE_ICONS")
   done
