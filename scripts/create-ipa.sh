@@ -138,7 +138,6 @@ then
   done <<< "`echo "$ICONS_ARR"`"
                                  
   SORT_ICONS=$(echo "$SORT_ICONS"| sort -nrk 2 | awk '{print $1}')
-  echo "$SORT_ICONS"
   icon2=$(echo "$SORT_ICONS" | sed -n 1p)
   icon=$(echo "$SORT_ICONS" | sed -n 2p)
                          
