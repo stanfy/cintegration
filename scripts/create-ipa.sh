@@ -133,12 +133,12 @@ then
   while read raw
   do
   	SIZE_ICONS=''
-        SIZE_ICONS=$(usr/bin/stat -f "%N %z" "${APPLICATION_ARCHIVE_LOCATION}/$raw" 2> /dev/null)
+        SIZE_ICONS=$(/usr/bin/stat -f "%N %z" "${APPLICATION_ARCHIVE_LOCATION}/$raw" 2> /dev/null)
         SORT_ICONS=$(printf "%s\n%s" "$SORT_ICONS" "$SIZE_ICONS")
   done <<< "`echo "$ICONS_ARR"`"
                                  
   SORT_ICONS=$(echo "$SORT_ICONS"| sort -nrk 2 | awk '{print $1}')
-  
+  echo "$SORT_ICONS"
   icon2=$(echo "$SORT_ICONS" | sed -n 1p)
   icon=$(echo "$SORT_ICONS" | sed -n 2p)
                          
