@@ -100,7 +100,7 @@ fi
 
 
 # CRITTERCISM UPLOAD
-if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
+if [ "a${CRITTERCISM_UPLOAD_NEEDED}" == "a1" ]; then
   echo "[INFO] Crittercism upload"
   if [ -n "${APP_ID}" -a -n "${API_KEY}" ]
   then
