@@ -99,3 +99,23 @@ if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
 fi
 
 
+# CRITTERCISM UPLOAD
+if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
+  echo "[INFO] Crittercism upload"
+  if [ -n "${APP_ID}" -a -n "${API_KEY}" ]
+  then
+  	DSYM_FILE=$(find ../output -d 1 -iname '*.zip')
+        #echo "IPA_FILE  $IPA_FILE"
+        /usr/bin/curl "https://www.crittercism.com/api_beta/dsym/${APP_ID}" -F dsym=@"${DSYM_FILE}" -F key="${API_KEY}"
+        echo
+                                      
+        if [ "$?" -ne "0" ]; then
+        	echo "[ERROR] Crittercism UPLOAD failed"
+                exit 1
+        fi
+  else
+  	echo "[ERROR] Crittercism need some parameters"
+        exit 1
+  fi
+fi
+                                                                                      
