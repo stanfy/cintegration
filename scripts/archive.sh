@@ -77,6 +77,14 @@ if [ "${USER}" == "jenkins-ci" ]; then
 fi
 
 
+if [ -n "$CFBundleIdentifier" -a -n "$CFBundlePath" ]
+then
+    CFBundlePath=$(echo "$CFBundlePath" | sed 's/^\///' )
+    /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $CFBundleIdentifier" "$CFBundlePath"
+    echo "[INFO] CFBundleIdentifier <$CFBundleIdentifier> was changed in $CFBundlePath"
+fi
+                        
+
 XCWORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" -print -quit)
 
 if [ -n "$XCWORKSPACE" ]
@@ -86,6 +94,12 @@ then
 else
 	echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}"
 	xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" > cintegration/output/build.log 2>&1
+fi
+
+if [ -n "$CFBundleIdentifier" -a -n "$CFBundlePath" ]
+then
+	/usr/bin/git stash > /dev/null && /usr/bin/git stash clear > /dev/null
+	echo "[INFO] Git was stashed"
 fi
 
 if [ "$?" -ne "0" ]; then
