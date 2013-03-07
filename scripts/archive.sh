@@ -96,12 +96,6 @@ else
 	xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" > cintegration/output/build.log 2>&1
 fi
 
-if [ -n "$CFBundleIdentifier" -a -n "$CFBundlePath" ]
-then
-	/usr/bin/git stash > /dev/null && /usr/bin/git stash clear > /dev/null
-	echo "[INFO] Git was stashed"
-fi
-
 if [ "$?" -ne "0" ]; then
   echo
   PROJ_GREP=`grep -oE "([[:alnum:]]+.[mh]:[0-9]+:[0-9]+)||(xcodebuild): error:.*" ${OUTPUT_DIR}/build.log`
@@ -115,6 +109,11 @@ if [ "$?" -ne "0" ]; then
 #  echo "[ERROR] ${PROJ_GREP}"
   echo "[ERROR] XCODE build failed. See output/build.log for error description"
   tail -n250 "${OUTPUT_DIR}/build.log"
+  if [ -n "$CFBundleIdentifier" -a -n "$CFBundlePath" ]
+  then
+       /usr/bin/git stash > /dev/null && /usr/bin/git stash clear > /dev/null
+       echo "[INFO] Git was stashed"
+  fi
   exit 1
 fi
 
