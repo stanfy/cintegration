@@ -1,4 +1,4 @@
-cripts for Continious Integration
+Scripts for Continious Integration
 =======
 
 Continious Integration for IOS.
