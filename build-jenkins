@@ -1,0 +1,72 @@
+#!/bin/sh
+
+#  Script is runing from Jenkins.
+#
+
+# determining from which directory script is executed
+DIR="$( cd -P "$( dirname "$0" )" && pwd )"
+
+# if build-jenkins uses outside bin/ dir then uncomment string below
+
+#DIR="$DIR/bin"
+
+# clean DerivedData and Workspace
+if [ "_$CleanProject" = "_true" ]
+then
+  echo
+  echo "-- PROJECT CLEANING --"
+  echo
+  DERIVEDDATA_DIR=$(grep -oE "/usr/bin/touch -c .*\.app" "$DIR/../output/build.log"  2> /dev/null| head -n1 | sed -e 's/.*\ \(.*\)\/Build\/.*/\1/')
+  if [ ! -d "$DERIVEDDATA_DIR" ]
+  then
+      DERIVEDDATA_DIR=$(grep  "BUILD_DIR" "$DIR/../output/build.log"  2> /dev/null | head -n1 | sed "s/setenv[[:blank:]]BUILD_DIR[[:blank:]]\([[:graph:]]\)/\1/;s/\ //g;s/Build\/Products//")
+  fi
+ 
+  
+  if [ -d "$DERIVEDDATA_DIR" ]
+  then
+    rm -rf "$DERIVEDDATA_DIR"
+    echo "[DEBUG] DerivedData $DERIVEDDATA_DIR is removed"
+  else 
+    echo "[WARNING] DerivedData dir $DERIVEDDATA_DIR is not found"
+    echo
+    echo "[INFO] First build project and then you may clean DerivedData"
+    echo
+  fi
+  
+  echo
+  find . -exec rm -rf {} \; 2> /dev/null
+  echo "[DEBUG] Workspace $WORKSPACE is removed"
+  echo
+  exit
+  
+fi
+
+
+# install pods
+"${DIR}/scripts/pods.sh"
+
+# going to cintegration / bin directory
+cd "${DIR}"
+
+if [ $# -gt 0 ]
+then
+  INIT_TYPE=$1
+  export INIT_TYPE
+fi
+
+if [ "$BuildDev" == "true" ]; then
+  ./build dev 
+  if [ "$?" -ne "0" ]; then
+  	exit 1
+  fi
+fi
+
+if [ "$BuildClient" == "true" ]; then
+  ./build client
+  if [ "$?" -ne "0" ]; then
+  	exit 1
+  fi
+fi
+
+                            
