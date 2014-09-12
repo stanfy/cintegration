@@ -23,12 +23,6 @@ fi
 
 source ${CFG_FILE}
 
-DEV_CFG_FILE=configs/$1-dev.cfg
-  if [ -f ${DEV_CFG_FILE} ]; then
-  echo Overriding ${CFG_FILE} with ${DEV_CFG_FILE}
-  source ${DEV_CFG_FILE}
-fi
-
 #check certs and mobileprovisions
 
 FULL_PROFILE_NAME="${PROJECT_NAME}-${PROFILE_NAME}"
@@ -42,7 +36,7 @@ case "$1" in
 'key')
    download_file="${UPLOAD_KEY}"
    download_path="$HOME/.keystore-ci"
-   store_path="${download_path}"
+   store_path="${download_file}"
    ;;
 'prov')
    download_file="${PROFILE_NAME}"
@@ -50,6 +44,22 @@ case "$1" in
    store_path="${PROJECT_NAME}-${PROFILE_NAME}"
    ;;
 esac   
+
+
+key_local_path=$( echo ${KEY_SERVER_PATH} | egrep -i '^http[s]?://')
+if [ -z "$key_local_path" ] 
+then
+   cp "${KEY_SERVER_PATH}/$download_file" "${download_path}/${store_path}" 2>/dev/null
+   if [ "$?" -eq "0" ]
+   then
+   	echo "[INFO] $download_file copied"
+   	return 
+   else
+   	echo "[ERROR] ${KEY_SERVER_PATH}/$download_file not found"
+   	exit 1
+   fi  
+fi
+
 
 if [ "0$auth_ok" == "01" ]
 then
@@ -115,11 +125,10 @@ if [ ! -d "${PROFILE_HOME}" ]; then
 fi
 
 
-
 #Searching profiles
 PROFILE_LOCATION="$PROFILE_HOME/${FULL_PROFILE_NAME}"
 if [ ! -f "${PROFILE_LOCATION}" ]; then
-   echo "[ERROR] Cannot find profile for specified build type ($1) : ( ${PROFILE_LOCATION})"
+   echo "[WARNING] Cannot find profile for specified build type ($1) : ( ${PROFILE_LOCATION})"
    load_provision 'prov'
 fi
       
@@ -142,20 +151,25 @@ PROFILE_UID=`grep -E "[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:aln
 
 #echo $PROFILE_UID      
 
-if [ ! -d "$HOME/.keystore-ci" ]
+if [ "a$FTP_UPLOAD_NEEDED" == "a1" ]
 then
-   mkdir "$HOME/.keystore-ci"
-   echo "[INFO] $HOME/.keystore-ci was created"
+   if [ ! -d "$HOME/.keystore-ci" ]
+   then
+       mkdir "$HOME/.keystore-ci"
+       echo "[INFO] $HOME/.keystore-ci was created"
+    fi
+
+    if [ -z "$UPLOAD_KEY" ]
+    then
+    	echo "[ERROR] 'UPLOAD_KEY' does not exist or does not have any value in base.cfg"
+    	exit 1
+    elif [ ! -f "$HOME/.keystore-ci/$UPLOAD_KEY" ]      
+    then
+       echo "[WARNING] $UPLOAD_KEY not present. Downloading..."
+       load_provision 'key'
+       chmod 600 "$HOME/.keystore-ci/$UPLOAD_KEY"
+    fi
 fi
-
-
-if [ ! -f "$HOME/.keystore-ci/$UPLOAD_KEY" ]      
-then
-   echo "[WARNING] $UPLOAD_KEY not present. Downloading..."
-   load_provision 'key'
-   chmod 600 "$HOME/.keystore-ci/$UPLOAD_KEY"
-fi
-
 
 # Get path to -Info.plist
 

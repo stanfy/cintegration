@@ -147,7 +147,7 @@ if [ "${INIT_TYPE}" != "auto" -a \( "${FTP_UPLOAD_NEEDED}" = "1" -o "${FTP_UPLOA
    export PROJECT_DEST_NAME=${PROJECT_DEST_NAME}
    
 else
-  echo "[SKIP ] Uploading skipped. This option can be enabled by setting 'FTP_UPLOAD_NEEDED' variable in cfg.file"
+  echo "[SKIP ] Uploading skipped. This option can be enabled by setting 'FTP_UPLOAD_NEEDED=1' variable in dev[client].cfg"
   echo
 fi
 
