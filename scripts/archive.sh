@@ -238,8 +238,8 @@ fi
 if [ "${USER}" == "$CI_USER" ]; then
   echo "[INTEGRATOR] Integrator user found"
   echo "[INTEGRATOR] Unlocking iPhone keychain"
-  security list-keychains -s "/Users/${CI_USER}/Library/Keychains/${KAYCHAIN_NAME}.keychain"
-  security unlock-keychain -p "$KEYCHAIN_PASS" "/Users/${CI_USER}/Library/Keychains/${KAYCHAIN_NAME}.keychain"
+  security list-keychains -s "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
+  security unlock-keychain -p "$KEYCHAIN_PASS" "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
 fi
 
 

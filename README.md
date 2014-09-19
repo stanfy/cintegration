@@ -1,44 +1,51 @@
-Scripts for Continious Integration
+Scripts for iOS Continious Integration 
 ======
 
-For Jenkins and a manual building of a project.
+Scripts allow to build and sign an ios project manually or by Jenkins.
 
 Main features
 ------------
-- To build and sign ipa
-- Generate plist file
-- Collect dsim
-- Add aditional info to app icon (git revision)
-- Upload results to a private web server
+- To build and sign ipa, ready for installation on device
+- Upload results to a private web server, with all necessary files
 - Upload results to Testflight
 - Upload results to Crittercism
 - Upload results to Hockeyapp
 - Upload results to Amazon S3
+- Generate plist file, for installation from web
+- Collect dsym
+- Add aditional info to app icon (git revision)
 
 
 
-Quick start
--------------
-To build and sign ipa. Results will be in the **output** folder.
+Minimal setup configuration
+-----------------------------
 
-- Create a folder **cintegration** in your project with a next structure.
+Structure of project, with steps below:
 
 ```bash
-xcode-project
+ios-project
              /cintegration
-                           /bin                   <-- git the submodule to this repo
-                           /configs               <-- create a folder
-                                     base.cfg     <-- add an empty file
-                                     dev.cfg      <-- add an empty file   
-                                     client.cfg   <-- optional: add an empty file
-                           /output                <-- created by script
+                           /bin
+                           /configs
+                                     base.cfg
+                                     dev.cfg
+                                     client.cfg
+                           /output
              /Frameworks
              /MyProject.xcworkspace
              /MyProject
 ```
 
-- Create a new keychain with name **ios**, set a password for its **integrator** and add a certificate with a private key for app signing
-- Create a folder and put there mobileprovision. For example: create **/User/jenkins/keys** and put there **dev.mobileprovision**
+Steps:
+
+- Create a folder **cintegration** in your project.
+- Create a folder **bin** and add submodule ***https://github.com/stanfy/cintegration.git***
+```
+$ git submodule add  https://github.com/stanfy/cintegration.git ios-project/cintegration/bin
+```
+- Create a folder **configs** 
+- Open **Keychain access** and add a corresponding certificate with a private key for app signing
+- Create a folder **$HOME/keys** and put there mobileprovision. For example: create **/User/jenkins/keys** and put there **dev.mobileprovision**
 - Create and edit minimal **base.cfg**
 
 ```bash
@@ -59,16 +66,7 @@ source main.cfg   #Don't edit
 #################################
 
 # Full url or local dir path to keys and provisions
-KEY_SERVER_PATH='/User/jenkins/keys'  #Edit
-
-# Build user, keychain owner
-CI_USER='jenkins'  #Edit
-
-# Keychain name with build certificate
-KAYCHAIN_NAME='ios' #Edit
-
-# Keychain pass to $KAYCHAIN_NAME
-KEYCHAIN_PASS='integrator'  #Edit
+KEY_SERVER_PATH='$HOME/keys'  #Edit
 
 # Path to Provisioning Profiles store
 PROFILE_HOME=$HOME/Library/MobileDevice/Provisioning\ Profiles  #Edit optional
@@ -89,22 +87,105 @@ SIGNING_IDENTITY="iPhone Developer: Ivan Ivanov (HI7B2WB91Q)"  #Edit
 PROFILE_NAME=dev.mobileprovision  #Edit
 ```
 
-- Run **dev** build
+- Run build manually or by Jenkins, as described below.
 
-- Results will be in the **output** folder
 
-Manual build
+Command line build
 ---------
-Make **cd** from project root  to **bin** folder and run ./build with ***dev*** or ***client*** parameter
+If you want to build and sign ipa from a command line, then
+go to project root to **bin** folder and run ./build with ***dev*** or ***client*** parameter
 ```
 cd cintegration/bin  && ./build dev
 ```
+Results will be in the **output** folder,  which is ready for installation via iTunes.
 
 Jenkins build
 ---------
-Run from project root
+If you want to build and sign ipa by Jenkins, then :
+- Open **Keychain access** on the build server and create a new keychain with name **ios**, set a password for its **integrator** 
+and add a corresponding certificate with a private key for app signing
+- Add parameters to **base.cfg**
+
+```bash
+# Build user, keychain owner
+CI_USER='jenkins'  #Edit
+
+# Keychain name with build certificate
+KEYCHAIN_NAME='ios' #Edit
+
+# Keychain pass to $KEYCHAIN_NAME
+KEYCHAIN_PASS='integrator'  #Edit
+```
+
+- Run from project root
+
 ```
 ./cintegration/bin/build-jenkins
+```
+- Results will be in the **output** folder, which is ready for installation via iTunes.
+
+
+Extended options
+------------
+
+You have an option to upload results to your web server with ability to install ipa from web. You need to add additional parameters.
+Upload to the web server will be over scp with a public ssh key. 
+- Setup SSH Public Key Authentication, [manual] (https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2)
+- Add parameters to **base.cfg**
+
+```bash
+# FTP connection parameters
+FTP_UPLOAD_HOST="stanfy.com"  #Edit
+FTP_UPLOAD_PORT="4545"        #Edit
+FTP_UPLOAD_USER="jenkins"     #Edit
+# Public key for upload file to the server, must be placed in $KEY_SERVER_PATH/
+UPLOAD_KEY='integrator.pub'  #Edit
+
+# Upload server name, need for plist generation
+HTTP_BASE="https://stanfy.com"  #Edit
+```
+
+- Add parameters to **dev.cfg**
+
+```bash
+# For upload file to $HTTP_BASE server
+FTP_UPLOAD_NEEDED=1  #Edit optional
+
+# Full path to upload server folder
+FTP_UPLOAD_DIR="/home/releases/${PROJECT_NAME}"  #Edit optional
+
+# Full url to upload server folder, need for plist creation
+IPA_URL="${HTTP_BASE}/releases/${PROJECT_NAME}"  #Edit optional
+
+
+```
+
+If you want to upload ipa to external services (Testflight, Crittercism, Hockeyapp, Amazon S3), then you need to add additional parameters.
+
+
+```bash
+
+# Upload to TESTFLIGHTS
+TESTFLIGHT_UPLOAD_NEEDED=0 # Set 1 to upload
+API_TOKEN=''
+TEAM_TOKEN=''
+DIST_LIST=''
+
+# Upload to CRITTERCISM
+CRITTERCISM_UPLOAD_NEEDED=0  # Set 1 to upload
+APP_ID=''
+API_KEY=''
+
+# Upload to HOCKEYAPP
+HOCKEYAPP_UPLOAD_NEEDED=0  # Set 1 to upload
+API_TOKEN_HOCKEYAPP=''
+
+# Upload to AMAZON S3
+S3_UPLOAD_NEEDED=0  # Set 1 to upload
+S3_ACCESS_KEY=''
+S3_SECRET_KEY=''
+S3_BUCKET=''
+
 ```
 
 
@@ -132,8 +213,8 @@ source main.cfg   #Don't edit
 # Upload server name 
 HTTP_BASE="https://stanfy.com"  #Edit
 
-# Full url to keys and provisions
-KEY_SERVER_PATH='https://stanfy.com/integration_keys'  #Edit
+# Full url or local dir path to keys and provisions
+KEY_SERVER_PATH='/User/jenkins/keys'  #Edit
 
 # WARNING: Servers name where project builds and make GIT STASH with GIT STASH CLEAN. 
 BUILD_SERVERS='build.stanfy.com'  #Edit carefully
@@ -142,9 +223,9 @@ BUILD_SERVERS='build.stanfy.com'  #Edit carefully
 CI_USER='jenkins'  #Edit
 
 # Keychain name with build certificate
-KAYCHAIN_NAME='ios' # Edit
+KEYCHAIN_NAME='ios' # Edit
 
-# Keychain pass to $KAYCHAIN_NAME
+# Keychain pass to $KEYCHAIN_NAME
 KEYCHAIN_PASS='integrator'  #Edit
 
 # Path to Provisioning Profiles store
@@ -226,22 +307,22 @@ IPA_URL="${HTTP_BASE}/clients/${PROJECT_NAME}"  #Edit optional
 ICON_ADD_INFO=0  #Edit optional
 
 # Upload to TESTFLIGHTS 
-TESTFLIGHT_UPLOAD_NEEDED=0 #Edit optional
+TESTFLIGHT_UPLOAD_NEEDED=0 # Set 1 to upload
 API_TOKEN=''
 TEAM_TOKEN=''
 DIST_LIST=''
 
 # Upload to CRITTERCISM 
-CRITTERCISM_UPLOAD_NEEDED=0  #Edit optional
+CRITTERCISM_UPLOAD_NEEDED=0  # Set 1 to upload
 APP_ID=''
 API_KEY=''
 
 # Upload to HOCKEYAPP
-HOCKEYAPP_UPLOAD_NEEDED=0  #Edit optional
+HOCKEYAPP_UPLOAD_NEEDED=0  # Set 1 to upload
 API_TOKEN_HOCKEYAPP=''
 
 # Upload to AMAZON S3
-S3_UPLOAD_NEEDED=0  #Edit optional
+S3_UPLOAD_NEEDED=0  # Set 1 to upload
 S3_ACCESS_KEY='' 
 S3_SECRET_KEY=''
 S3_BUCKET=''
