@@ -41,7 +41,7 @@ if [ ! -d "../output" ]; then
 fi
 
 #copy profile location to output
-PROFILE_LOCATION="$PROFILE_HOME/${PROFILE_NAME}"
+PROFILE_LOCATION="$PROFILE_HOME/${FULL_PROFILE_NAME}"
 echo "[COPY ] ${PROFILE_LOCATION} --> ../output/${PROJECT_DEST_NAME}.mobileprovision"
 cp "${PROFILE_LOCATION}" "../output/${PROJECT_DEST_NAME}.mobileprovision"
 
