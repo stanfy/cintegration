@@ -238,6 +238,8 @@ FTP_UPLOAD_USER="jenkins"     #Edit
 # Public key for upload file to the server, must be placed in $KEY_SERVER_PATH/
 UPLOAD_KEY='integrator.pub'  #Edit
 
+# Change PLIST_BUNDLE_IDENTIFIER_SUFFIX in plist
+BUNDLE_IDENT_SUFFIX="" #Edit
 ```
 
 Example **dev.cfg**

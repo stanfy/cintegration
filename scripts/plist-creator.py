@@ -30,6 +30,7 @@ PLIST_BUNDLE_VERSION = '<NOT_SPECIFIED>'
 PLIST_APP_TITLE = '<NOT_SPECIFIED>'
 PLIST_APP_SUBTITLE = '<NOT_SPECIFIED>'
 PLIST_NAME = '<NOT_SPECIFIED>'
+PLIST_BUNDLE_IDENTIFIER_SUFFIX = ''
 
 opts, args = getopt.getopt(sys.argv[1:], "uivtsn", ["ipa-url=", "plist-application-info-location=", "plist-app-title=", "plist-app-subtitle=", "plist-name="])
               
@@ -44,7 +45,9 @@ for opt, arg in opts:
         PLIST_APP_SUBTITLE = arg                
     elif opt in ("-n", "--plist-name"): 
         PLIST_NAME = arg        
-
+    elif opt in ("-i", "--bundle-ident-suffix"):
+        PLIST_BUNDLE_IDENTIFIER_SUFFIX = arg
+            
 
 from Foundation import NSMutableDictionary
 from Foundation import NSMutableArray
@@ -53,6 +56,8 @@ if not PLIST_APPLICATION_INFO_LOCATION:
    sys.exit(1)
 application_info = NSMutableDictionary.dictionaryWithContentsOfFile_(PLIST_APPLICATION_INFO_LOCATION)
 PLIST_BUNDLE_IDENTIFIER = application_info.objectForKey_('CFBundleIdentifier')
+if PLIST_BUNDLE_IDENTIFIER_SUFFIX != '':
+   PLIST_BUNDLE_IDENTIFIER = PLIST_BUNDLE_IDENTIFIER + PLIST_BUNDLE_IDENTIFIER_SUFFIX
 PLIST_BUNDLE_VERSION = application_info.objectForKey_('CFBundleVersion')
 print '[DEBUG] Bundle identifier = %(PLIST_BUNDLE_IDENTIFIER)s' % vars()
 print '[DEBUG] Bundle version    = %(PLIST_BUNDLE_VERSION)s' % vars()

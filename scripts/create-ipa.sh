@@ -40,7 +40,10 @@ if [ ! -d "../output" ]; then
   mkdir -p "../output"
 fi
 
+
+
 #copy profile location to output
+FULL_PROFILE_NAME="${PROJECT_NAME}-${PROFILE_NAME}"
 PROFILE_LOCATION="$PROFILE_HOME/${FULL_PROFILE_NAME}"
 echo "[COPY ] ${PROFILE_LOCATION} --> ../output/${PROJECT_DEST_NAME}.mobileprovision"
 cp "${PROFILE_LOCATION}" "../output/${PROJECT_DEST_NAME}.mobileprovision"
@@ -128,12 +131,12 @@ echo [DEBUG] INFO_PLIST_LOCATION = ${INFO_PLIST_LOCATION}
 
 #CREATING PLIST FOR DISTRIBUTED BUILD
 
-#PWD=`pwd`
-#echo `dirname ${PWD}`
-
-#echo rnning python2.5 scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}"
-python2.5 scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}"
-
+if [ -z "$BUNDLE_IDENT_SUFFIX" ]
+then 
+	python2.5 scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}"
+else
+	python2.5 scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}" --bundle-ident-suffix "${BUNDLE_IDENT_SUFFIX}"
+fi
 
 if [ "$?" -ne "0" ]; then
   echo [ERROR] Plist creation failed
