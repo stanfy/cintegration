@@ -46,9 +46,26 @@ then
   then
 	echo
         echo "-- PODS INSTALLING --"
+
+        prj_name=$(find . -maxdepth 2 -name '*.xcworkspace')
+        pbxproj=$(find . -name project.pbxproj | grep ${prj/.xcworkspace/} | head -n 1)
+        check=''
+        check=$(grep  'debug.xcconfig' "$pbxproj")
+
         cd "$podfile_dir"
-        pod install --no-ansi
+        if [ -n "$check" ]
+        then
+                pod_version=$(pod --version | tail -n1)
+                echo "[INFO] Using pod version: $pod_version"
+                LANG=en_US.UTF-8 pod install --no-ansi
+
+        else
+                pod_version=$(pod _0.33.1_ --version | tail -n1)
+                echo "[INFO] Using pod version: $pod_version"
+                LANG=en_US.UTF-8 pod _0.33.1_ install --no-ansi
+        fi
         echo
+
   fi
 fi
                                         
