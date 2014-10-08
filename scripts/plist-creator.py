@@ -32,7 +32,7 @@ PLIST_APP_SUBTITLE = '<NOT_SPECIFIED>'
 PLIST_NAME = '<NOT_SPECIFIED>'
 PLIST_BUNDLE_IDENTIFIER_SUFFIX = ''
 
-opts, args = getopt.getopt(sys.argv[1:], "uivtsn", ["ipa-url=", "plist-application-info-location=", "plist-app-title=", "plist-app-subtitle=", "plist-name="])
+opts, args = getopt.getopt(sys.argv[1:], "uivtsn", ["ipa-url=", "plist-application-info-location=", "plist-app-title=", "plist-app-subtitle=", "plist-name=", "bundle-ident-suffix="])
               
 for opt, arg in opts:    
     if opt in ("-u", "--ipa-url"):      
