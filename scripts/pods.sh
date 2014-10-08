@@ -48,7 +48,7 @@ then
         echo "-- PODS INSTALLING --"
 
         prj_name=$(find . -maxdepth 2 -name '*.xcworkspace')
-        pbxproj=$(find . -name project.pbxproj | grep ${prj/.xcworkspace/} | head -n 1)
+        pbxproj=$(find . -name project.pbxproj | grep ${prj_name/.xcworkspace/} | head -n 1)
         check=''
         check=$(grep  'debug.xcconfig' "$pbxproj")
 
