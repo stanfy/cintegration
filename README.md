@@ -7,6 +7,7 @@ Main features
 ------------
 - To build and sign ipa, ready for installation on device
 - Upload results to a private web server, with all necessary files
+- Upload results to Appstore
 - Upload results to Testflight
 - Upload results to Crittercism
 - Upload results to Hockeyapp
@@ -27,6 +28,7 @@ ios-project
              /cintegration
                            /bin
                            /configs
+                                     appstore.cfg
                                      base.cfg
                                      dev.cfg
                                      client.cfg
@@ -160,6 +162,27 @@ IPA_URL="${HTTP_BASE}/releases/${PROJECT_NAME}"  #Edit optional
 
 ```
 
+If you want to upload ipa to Appstore, then you need to create **appstore.cfg**.
+
+```bash
+#!/bin/sh
+
+#BASE CFG
+source ../configs/base.cfg
+
+#UPDATE
+CONFIGURATION=Release
+
+#SIGNING
+SIGNING_IDENTITY="iPhone Distribution: Your app (45RIY$HH)" #Edit
+
+APPSTORE_UPLOAD_NEEDED=1  
+ITUNES_CONNECT_LOGIN='email@mail.com' #Edit
+ITUNES_CONNECT_PASS='1Hj23b923vhj3' #Edit
+
+```
+
+
 If you want to upload ipa to external services (Testflight, Crittercism, Hockeyapp, Amazon S3), then you need to add additional parameters.
 
 
@@ -187,6 +210,8 @@ S3_SECRET_KEY=''
 S3_BUCKET=''
 
 ```
+
+
 
 
 Detail configuration

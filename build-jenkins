@@ -69,4 +69,10 @@ if [ "$BuildClient" == "true" ]; then
   fi
 fi
 
-                            
+if [ "$BuildAppstore" == "true" ]; then
+  ./build appstore
+  if [ "$?" -ne "0" ]; then
+        exit 1
+  fi
+fi
+                                          

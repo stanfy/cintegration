@@ -98,50 +98,6 @@ if [ "${INIT_TYPE}" != "auto" -a \( "${FTP_UPLOAD_NEEDED}" = "1" -o "${FTP_UPLOA
 
    fi 
    
-   if [ "${FTP_UPLOAD_NEEDED_USA}" = "1" ]
-   then
-	chmod -R g+w     "${OUTPUT_PROJECT}"
-        
-        if [ "${S3_UPLOAD_NEEDED}" = "1" ]
-        then
-               	exclude='*.ipa'
-               	sed -i '' s#${IPA_URL}#${IPA_URL_S3}# ${OUTPUT_PROJECT}/*.plist
-
-		if [ $S3_UPLOADED -eq 0 ]
-		then
-			IPA_FILE=$(ls ${OUTPUT_PROJECT}/*.ipa)
-	                IPA_URL_S3="http://${S3_BUCKET}.s3.amazonaws.com"
-	                echo "[INFO]   Uploading to ${IPA_URL_S3}"
-                
-	                /usr/local/bin/s3cmd -c "extended/s3cfg" --access_key="${S3_ACCESS_KEY}"  --secret_key="${S3_SECRET_KEY}"  put ${IPA_FILE} -P "s3://${S3_BUCKET}/"
-	                if [ "$?" -ne "0" ]; then
-	                	echo "[ERROR] Amazon S3 upload failed"
-	                        exit 1
-	                else
-	                	echo "[INFO]   Uploaded to S3"
-	                	echo
-	                fi
-        	fi
-        else
-        	exclude='0'
-        	sed -i '' s#${IPA_URL}#${IPA_URL_USA}# ${OUTPUT_PROJECT}/*.plist
-        fi
-
-	echo "[INFO]   To:  ${FTP_UPLOAD_HOST_USA}:${FTP_UPLOAD_DIR_USA}"                                                                                                                                                                                                                                         
-	rsync --exclude "$exclude" -vr "${OUTPUT_PROJECT}/" -e "ssh -p${FTP_UPLOAD_PORT} -i $HOME/.keystore-ci/$UPLOAD_KEY" "${FTP_UPLOAD_USER}@${FTP_UPLOAD_HOST_USA}:${FTP_UPLOAD_DIR_USA}/" >> ../output/build.log 2>&1
-                                                     
-	if [ "$?" -ne "0" ]; then
-	   	echo [ERROR] FTP UPLOAD failed
-	        exit 1
-	else
-		echo "[INFO]   Link ${IPA_URL_USA/ios/}"  
-		echo "[INFO]   Uploaded to usprod"
-		echo
-		              
-	fi
-   
-     fi
-   
    #Export vars
    export PROJECT_DATE=${PROJECT_DATE}
    export PROJECT_DEST_NAME=${PROJECT_DEST_NAME}
@@ -159,7 +115,7 @@ if [ "a${APPSTORE_UPLOAD_NEEDED}" == "a1" ]; then
   then
 	echo "[INFO] Insert credential for <${ITUNES_CONNECT_LOGIN}> in keychain"
 	
-	/usr/bin/security add-generic-password -s Xcode:itunesconnect.apple.com -a "${ITUNES_CONNECT_LOGIN}" -w "${ITUNES_CONNECT_PASS}" -UA
+	/usr/bin/security add-generic-password -s Xcode:itunesconnect.apple.com -a "${ITUNES_CONNECT_LOGIN}" -w "${ITUNES_CONNECT_PASS}" -UA "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
   	
   	IPA_FILE=$(find ../output -d 1 -iname '*.ipa')
   
@@ -169,7 +125,7 @@ if [ "a${APPSTORE_UPLOAD_NEEDED}" == "a1" ]; then
                                       
 	echo "[INFO] Remove credential for <${ITUNES_CONNECT_LOGIN}> from keychain"
 	
-	/usr/bin/security delete-generic-password -s Xcode:itunesconnect.apple.com -a "${ITUNES_CONNECT_LOGIN}"
+	/usr/bin/security delete-generic-password -s Xcode:itunesconnect.apple.com -a "${ITUNES_CONNECT_LOGIN}" "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
   else
   	echo "[ERROR] Missing some parameters"
   	exit 1
