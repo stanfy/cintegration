@@ -63,11 +63,11 @@ fi
 
 if [ "0$auth_ok" == "01" ]
 then
-   wget --http-user="${user}" --http-password="${pass}" -O "${download_path}/${store_path}" "${KEY_SERVER_PATH}/$download_file" 2>/dev/null
+   wget --no-check-certificate --http-user="${user}" --http-password="${pass}" -O "${download_path}/${store_path}" "${KEY_SERVER_PATH}/$download_file" 2>/dev/null
    status_first=$?
 else
 
-   wget -O "${download_path}/${store_path}" "${KEY_SERVER_PATH}/${download_file}" 2>/dev/null
+   wget --no-check-certificate -O "${download_path}/${store_path}" "${KEY_SERVER_PATH}/${download_file}" 2>/dev/null
    status_first=$?
 
    if [ $status_first -eq 6 ]
@@ -83,7 +83,7 @@ else
 		printf 'password: '
 		read pass 
 	
-		wget --http-user="${user}" --http-password="${pass}" -O "${download_path}/${store_path}" "${KEY_SERVER_PATH}/$download_file" 2>/dev/null
+		wget --no-check-certificate --http-user="${user}" --http-password="${pass}" -O "${download_path}/${store_path}" "${KEY_SERVER_PATH}/$download_file" 2>/dev/null
 		status=$?
 		if [ $status -eq 0 ]
 		then
