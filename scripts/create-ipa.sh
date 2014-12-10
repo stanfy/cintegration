@@ -72,7 +72,7 @@ echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 
 		PRESENT_DIR=`pwd`
 		pushd "$DWARF_DSYM_FOLDER_PATH" > /dev/null
-		zip -r "${PRESENT_DIR}/../output/${PROJECT_DEST_NAME}.zip" "${DWARF_DSYM_FILE_NAME}"
+		zip -r "${PRESENT_DIR}/../output/${PROJECT_DEST_NAME}.dSym.zip" "${DWARF_DSYM_FILE_NAME}"
 		popd > /dev/null
 		
 		if [ "$?" -eq "0" ]; then

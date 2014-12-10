@@ -51,28 +51,26 @@ cd "${DIR}"
 
 if [ $# -gt 0 ]
 then
+
   INIT_TYPE=$1
   export INIT_TYPE
 fi
 
-if [ "$BuildDev" == "true" ]; then
-  ./build dev 
-  if [ "$?" -ne "0" ]; then
-  	exit 1
-  fi
-fi
+# Next we will iterate over all ENV variables with names starting CIBuild
+# and execute build in specified configuration
+pattern="Build"
+env_params=`export | grep $pattern | sed "s/^.*\($pattern.*\)=.*/\1/"`
+# echo "[DEBUG $env_params]"
 
-if [ "$BuildClient" == "true" ]; then
-  ./build client
-  if [ "$?" -ne "0" ]; then
-  	exit 1
-  fi
-fi
 
-if [ "$BuildAppstore" == "true" ]; then
-  ./build appstore
-  if [ "$?" -ne "0" ]; then
+for i in $env_params
+  do
+    if [ `printenv $i` = "true" ]; then
+      param=`echo $i | sed s/^$pattern// | tr '[:upper:]' '[:lower:]'`
+      ./build $param
+      if [ "$?" -ne "0" ]; then
         exit 1
-  fi
-fi
-                                          
+      fi
+    fi
+done
+
