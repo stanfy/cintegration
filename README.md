@@ -267,7 +267,7 @@ UPLOAD_KEY='integrator.pub'  #Edit
 BUNDLE_IDENT_SUFFIX="" #Edit
 
 # Change CFBundleIdentifier in project info.plist
-BUNDLEIDENTIFIER"="" #Edit
+BUNDLEIDENTIFIER="" #Edit
 
 ```
 
