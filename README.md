@@ -265,6 +265,10 @@ UPLOAD_KEY='integrator.pub'  #Edit
 
 # Change PLIST_BUNDLE_IDENTIFIER_SUFFIX in plist
 BUNDLE_IDENT_SUFFIX="" #Edit
+
+# Change CFBundleIdentifier in project info.plist
+BUNDLEIDENTIFIER"="" #Edit
+
 ```
 
 Example **dev.cfg**
