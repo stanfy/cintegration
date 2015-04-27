@@ -116,7 +116,14 @@ echo "[SIGN ] PROFILE : ${PROFILE_LOCATION}"
 /usr/bin/perl "${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication" $2 "${APPLICATION_ARCHIVE_LOCATION}" -o "${IPA_ARCHIVE_LOCATION}" --sign "${SIGNING_IDENTITY}" --embed "${PROFILE_LOCATION}"
 
 if [ "$?" -ne "0" ]; then
-  echo [ERROR] Codesign failed
+  echo '[ERROR] Codesign failed'
+  echo
+  echo 'If you use Xcode version 6.0.1+ :'    
+  echo 'Click on your project > Targets > Select your target > Build Settings >'
+  echo 'Code Signing Resource Rules Path'
+  echo 'and add :'
+  echo '$(SDKROOT)/ResourceRules.plist'
+              
   exit 1;
 fi
 
