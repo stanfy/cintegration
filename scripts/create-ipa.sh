@@ -133,9 +133,9 @@ echo [DEBUG] INFO_PLIST_LOCATION = ${INFO_PLIST_LOCATION}
 
 if [ -z "$BUNDLE_IDENT_SUFFIX" ]
 then 
-	python2.5 scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}"
+	python scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}"
 else
-	python2.5 scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}" --bundle-ident-suffix="${BUNDLE_IDENT_SUFFIX}"
+	python scripts/plist-creator.py --ipa-url="${IPA_FULL_URL}" --plist-application-info-location="${INFO_PLIST_LOCATION}" --plist-app-title="${PLIST_TITLE}" --plist-app-subtitle="${PLIST_SUBTITLE}" --plist-name="${PLIST_NAME}" --bundle-ident-suffix="${BUNDLE_IDENT_SUFFIX}"
 fi
 
 if [ "$?" -ne "0" ]; then
