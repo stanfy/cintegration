@@ -38,7 +38,7 @@ if [ "${INIT_TYPE}" != "auto" -a \( "${FTP_UPLOAD_NEEDED}" = "1" -o "${FTP_UPLOA
      rm -r "${OUTPUT_PROJECT}"
    fi
    mkdir "${OUTPUT_PROJECT}"
-   rsync -r --exclude "${PROJECT_NAME}"  --exclude '*.log' ../output/ "${OUTPUT_PROJECT}"
+   rsync -r --exclude "${PROJECT_NAME}"  --exclude '*.log' --exclude '*.xcarchive' ../output/ "${OUTPUT_PROJECT}"
    
    S3_UPLOADED=0
   
