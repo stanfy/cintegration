@@ -52,7 +52,7 @@ if [ "a${EXTENSIONS}" != "a1" ]
 then
 
 app_list=$(grep DerivedData ../output/build.log)
-APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log)
+APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log | sed 's/\([^\]\)\ /\1\\\ /g')
 
 echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 
