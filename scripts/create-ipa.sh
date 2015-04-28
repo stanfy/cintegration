@@ -149,7 +149,13 @@ echo
 echo -- DISTRIBUTION PLIST CREATION --
 
 #Getting Info.plist file location
-INFO_PLIST_LOCATION="${APPLICATION_ARCHIVE_LOCATION}/Info.plist"
+if [ "a${EXTENSIONS}" == "a1" ]
+then
+  INFO_PLIST_LOCATION=$(find ${APPLICATION_ARCHIVE_LOCATION}/Products/Applications -maxdepth 2 -name "Info.plist" -print -quit | head -n 1)
+else
+  INFO_PLIST_LOCATION="${APPLICATION_ARCHIVE_LOCATION}/Info.plist"
+fi
+
 echo [DEBUG] INFO_PLIST_LOCATION = ${INFO_PLIST_LOCATION}
 
 #CREATING PLIST FOR DISTRIBUTED BUILD
