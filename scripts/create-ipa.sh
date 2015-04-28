@@ -54,6 +54,11 @@ then
 app_list=$(grep DerivedData ../output/build.log)
 APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log | sed 's/\([^\]\)\ /\1\\\ /g')
 
+#How project name looks
+if [ -n "${PROJECT_APP_FILE_NAME}" ]; then
+  APPLICATION_ARCHIVE_LOCATION=$(dirname ${APPLICATION_ARCHIVE_LOCATION})"/${PROJECT_APP_FILE_NAME}"
+fi
+
 echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 
 	DWARF_DSYM_FOLDER_PATH=$(dirname "${APPLICATION_ARCHIVE_LOCATION}")
