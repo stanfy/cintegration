@@ -43,6 +43,11 @@ case "$1" in
    download_path="${PROFILE_HOME}"
    store_path="${PROJECT_NAME}-${PROFILE_NAME}"
    ;;
+'exten')
+   download_file="${PROFILE_EXTENSIONS_NAME}"
+   download_path="${PROFILE_HOME}"
+   store_path="${PROJECT_NAME}-${PROFILE_EXTENSIONS_NAME}"
+   ;;
 esac   
 
 
@@ -124,12 +129,19 @@ if [ ! -d "${PROFILE_HOME}" ]; then
    echo "[INFO] $HOME/Library/MobileDevice/Provisioning\ Profiles/ was created"
 fi
 
-
 #Searching profiles
 PROFILE_LOCATION="$PROFILE_HOME/${FULL_PROFILE_NAME}"
 if [ ! -f "${PROFILE_LOCATION}" ]; then
    echo "[WARNING] Cannot find profile for specified build type ($1) : ( ${PROFILE_LOCATION})"
    load_provision 'prov'
+fi
+      
+
+#Searching provision for extension
+PROFILE_EXTEN_LOCATION="$PROFILE_HOME/${PROJECT_NAME}-${PROFILE_EXTENSIONS_NAME}"   
+if [ ! -f "${PROFILE_EXTEN_LOCATION}" ]; then
+   echo "[WARNING] Cannot find extension profile for specified build type ($1) : ( ${PROFILE_EXTEN_LOCATION})"
+   load_provision 'exten'
 fi
       
 
@@ -318,8 +330,15 @@ XCWORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" -print -quit)
 
 if [ -n "$XCWORKSPACE" ]
 then
-        echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -workspace ${XCWORKSPACE} -configuration ${CONFIGURATION} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}"
-        xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -workspace ${XCWORKSPACE} -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" > cintegration/output/build.log 2>&1
+	if [ "a${EXTENSIONS}" != "a1" ]
+	then
+       		echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -workspace ${XCWORKSPACE} -configuration ${CONFIGURATION} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}"
+        	xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -workspace ${XCWORKSPACE} -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" > cintegration/output/build.log 2>&1
+	else
+		XCARCHIVE_LOCATION=`find . -maxdepth 2 -name "cintegration" -print -quit`/output/${PROJECT_NAME}.xcarchive
+		echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -workspace ${XCWORKSPACE} -configuration ${CONFIGURATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" XCARCHIVE_LOCATION="${XCARCHIVE_LOCATION}" 
+		xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -workspace ${XCWORKSPACE} -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} -archivePath ${XCARCHIVE_LOCATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" > cintegration/output/build.log 2>&1
+	fi
 else
 	echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}"
 	xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" > cintegration/output/build.log 2>&1

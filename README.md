@@ -6,8 +6,8 @@ Scripts allow to build and sign an ios project manually or by Jenkins.
 Main features
 ------------
 - To build and sign ipa, ready for installation on device
+- With extensions
 - Upload results to a private web server, with all necessary files
-- Upload results to Appstore
 - Upload results to Testflight
 - Upload results to Crittercism
 - Upload results to Hockeyapp
@@ -162,26 +162,15 @@ IPA_URL="${HTTP_BASE}/releases/${PROJECT_NAME}"  #Edit optional
 
 ```
 
-If you want to upload ipa to Appstore, then you need to create **appstore.cfg**.
+If you want to build ipa with extension, then you need to add parameters.
 
 ```bash
-#!/bin/sh
 
-#BASE CFG
-source ../configs/base.cfg
-
-#UPDATE
-CONFIGURATION=Release
-
-#SIGNING
-SIGNING_IDENTITY="iPhone Distribution: Your app (45RIY$HH)" #Edit
-
-APPSTORE_UPLOAD_NEEDED=1  
-ITUNES_CONNECT_LOGIN='email@mail.com' #Edit
-ITUNES_CONNECT_PASS='1Hj23b923vhj3' #Edit
+# Build with extension
+EXTENSIONS=1
+PROFILE_EXTENSIONS_NAME=AppWidget.mobileprovision
 
 ```
-
 
 If you want to upload ipa to external services (Testflight, Crittercism, Hockeyapp, Amazon S3), then you need to add additional parameters.
 
