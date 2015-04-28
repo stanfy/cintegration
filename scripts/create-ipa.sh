@@ -48,6 +48,9 @@ PROFILE_LOCATION="$PROFILE_HOME/${FULL_PROFILE_NAME}"
 echo "[COPY ] ${PROFILE_LOCATION} --> ../output/${PROJECT_DEST_NAME}.mobileprovision"
 cp "${PROFILE_LOCATION}" "../output/${PROJECT_DEST_NAME}.mobileprovision"
 
+if [ "a${EXTENSIONS}" != "a1" ]
+then
+
 app_list=$(grep DerivedData ../output/build.log)
 APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log)
 
@@ -93,6 +96,8 @@ if [ ! -d "${APPLICATION_ARCHIVE_LOCATION}" ]; then
   exit 1
 fi
 
+fi
+
 echo 
 echo -- IPA PACKAGING AND SIGNING --
 
@@ -111,9 +116,20 @@ DEVELOPER_LOCATION=`xcode-select -print-path`
 export CODESIGN_ALLOCATE="${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate"
 echo "[SIGN ] OUTPUT  : ${IPA_ARCHIVE_LOCATION}"
 echo "[SIGN ] SIGNER  : ${SIGNING_IDENTITY}"
-echo "[SIGN ] PROFILE : ${PROFILE_LOCATION}"
 
-/usr/bin/perl "${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication" $2 "${APPLICATION_ARCHIVE_LOCATION}" -o "${IPA_ARCHIVE_LOCATION}" --sign "${SIGNING_IDENTITY}" --embed "${PROFILE_LOCATION}"
+if [ "a${EXTENSIONS}" == "a1" ]
+then
+   XCARCHIVE_LOCATION=`pwd`/../output/${PROJECT_NAME}.xcarchive
+   APPLICATION_ARCHIVE_LOCATION=${XCARCHIVE_LOCATION}
+
+   echo "[SIGN ] XCARCHIVE_LOCATION : ${XCARCHIVE_LOCATION}"
+
+   xcodebuild -exportArchive -archivePath ${XCARCHIVE_LOCATION} -exportPath "${IPA_ARCHIVE_LOCATION}" -exportWithOriginalSigningIdentity > /dev/null
+else
+   echo "[SIGN ] PROFILE : ${PROFILE_LOCATION}"
+   /usr/bin/perl "${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication" $2 "${APPLICATION_ARCHIVE_LOCATION}" -o "${IPA_ARCHIVE_LOCATION}" --sign "${SIGNING_IDENTITY}" --embed "${PROFILE_LOCATION}"
+fi
+
 
 if [ "$?" -ne "0" ]; then
   echo '[ERROR] Codesign failed'
