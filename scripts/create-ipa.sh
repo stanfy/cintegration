@@ -89,7 +89,7 @@ echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
 		
 	fi
 
-if [ ! -d "${APPLICATION_ARCHIVE_LOCATION}" ]; then
+if [ ! -d ${APPLICATION_ARCHIVE_LOCATION} ]; then
   echo "[ERROR] No application archive at ${APPLICATION_ARCHIVE_LOCATION} :("
   echo "[ERROR] Make sure, that you correctly specified PROJECT_APP_FILE_NAME variable in cfg file"
   echo "[ERROR] Currently it has '${PROJECT_APP_FILE_NAME}' value"
