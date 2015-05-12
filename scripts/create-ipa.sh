@@ -52,7 +52,13 @@ if [ "a${EXTENSIONS}" != "a1" ]
 then
 
 app_list=$(grep DerivedData ../output/build.log)
-APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log | sed 's/\([^\]\)\ /\1\\\ /g')
+
+APPLICATION_ARCHIVE_LOCATION=$(cat  ../output/build.log| grep CODESIGNING_FOLDER_PATH| cut -d'=' -f2| head -n 1)
+
+if [ -z "$APPLICATION_ARCHIVE_LOCATION" ]
+then
+	APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log | sed 's/\([^\]\)\ /\1\\\ /g')
+fi
 
 #How project name looks
 if [ -n "${PROJECT_APP_FILE_NAME}" ]; then
