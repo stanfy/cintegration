@@ -137,6 +137,16 @@ then
    echo "[SIGN ] XCARCHIVE_LOCATION : ${XCARCHIVE_LOCATION}"
 
    xcodebuild -exportArchive -archivePath ${XCARCHIVE_LOCATION} -exportPath "${IPA_ARCHIVE_LOCATION}" -exportWithOriginalSigningIdentity > /dev/null
+   if [ -n "${EXTENSIONS_DIRS}" ]
+   then
+   	echo "[INFO] Adding to ipa: ${EXTENSIONS_DIRS}"
+	mv "${IPA_ARCHIVE_LOCATION}" "${XCARCHIVE_LOCATION}/" 
+	pushd ${XCARCHIVE_LOCATION} > /dev/null
+                zip -r "${IPA_NAME}" ${EXTENSIONS_DIRS}
+        popd > /dev/null
+	cp "${XCARCHIVE_LOCATION}/${IPA_NAME}" "${IPA_ARCHIVE_LOCATION}"
+   fi
+                                                                                               
 else
    echo "[SIGN ] PROFILE : ${PROFILE_LOCATION}"
    /usr/bin/perl "${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication" $2 "${APPLICATION_ARCHIVE_LOCATION}" -o "${IPA_ARCHIVE_LOCATION}" --sign "${SIGNING_IDENTITY}" --embed "${PROFILE_LOCATION}"

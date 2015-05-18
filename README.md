@@ -169,7 +169,7 @@ If you want to build ipa with extension, then you need to add parameters.
 # Build with extension
 EXTENSIONS=1
 PROFILE_EXTENSIONS_NAME=AppWidget.mobileprovision
-
+EXTENSIONS_DIRS='WatchKitSupport SwiftSupport' # Copy additional extensions to ipa from xcarchive  
 ```
 
 If you want to upload ipa to external services (Testflight, Crittercism, Hockeyapp, Amazon S3), then you need to add additional parameters.
