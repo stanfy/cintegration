@@ -35,37 +35,23 @@ podfile=$(find . -name Podfile -maxdepth 2 )
 if [ -n "$podfile" ]
 then
   podfile_dir=$(echo "$podfile" | xargs dirname)
-
+  
   mod_time=$(stat -f %m "$podfile")
-
+    
   now_time=$(date +%s)
-
+      
   let "diff_time = $now_time - $mod_time"
-
+        
   if [ $diff_time -lt $WAIT_TIME ]
   then
-	echo
+  	echo
         echo "-- PODS INSTALLING --"
-
-        prj_name=$(find . -maxdepth 2 -name '*.xcworkspace')
-        pbxproj=$(find . -name project.pbxproj | grep -i ${prj_name/.xcworkspace/} | head -n 1)
-        check=''
-        check=$(grep  'debug.xcconfig' "$pbxproj")
-
-        cd "$podfile_dir"
-        if [ -n "$check" ]
-        then
-                pod_version=$(pod --version | tail -n1)
-                echo "[INFO] Using pod version: $pod_version"
-                LANG=en_US.UTF-8 pod install --no-ansi
-
-        else
-                pod_version=$(pod _0.33.1_ --version | tail -n1)
-                echo "[INFO] Using pod version: $pod_version"
-                LANG=en_US.UTF-8 pod _0.33.1_ install --no-ansi
-        fi
-        echo
-
+                            
+        pod_version=$(pod --version | tail -n1)
+        echo "[INFO] Using pod version: $pod_version"
+        LANG=en_US.UTF-8 pod install --no-ansi
+                                                    
   fi
 fi
-                                        
+                                                      
+                                                      
