@@ -60,6 +60,11 @@ then
 	APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log | sed 's/\([^\]\)\ /\1\\\ /g')
 fi
 
+if [ -z "$APPLICATION_ARCHIVE_LOCATION" ]
+then
+        APPLICATION_ARCHIVE_LOCATION=$(grep DerivedData build.log| grep '\.app'| sed -e 's/.*\(\/Users.*\.app\).*/\1/' | head -n 1)
+fi
+
 #How project name looks
 if [ -n "${PROJECT_APP_FILE_NAME}" ]; then
   APPLICATION_ARCHIVE_LOCATION=$(dirname "${APPLICATION_ARCHIVE_LOCATION}")"/${PROJECT_APP_FILE_NAME}.app"
