@@ -57,12 +57,14 @@ APPLICATION_ARCHIVE_LOCATION=$(cat  ../output/build.log| grep CODESIGNING_FOLDER
 
 if [ -z "$APPLICATION_ARCHIVE_LOCATION" ]
 then
+	echo "[INFO] Looking for APPLICATION_ARCHIVE_LOCATION stage 2"
 	APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log | sed 's/\([^\]\)\ /\1\\\ /g')
 fi
 
 if [ -z "$APPLICATION_ARCHIVE_LOCATION" ]
 then
-        APPLICATION_ARCHIVE_LOCATION=$(grep DerivedData build.log| grep '\.app'| sed -e 's/.*\(\/Users.*\.app\).*/\1/' | head -n 1)
+	echo "[INFO] Looking for APPLICATION_ARCHIVE_LOCATION stage 3"
+        APPLICATION_ARCHIVE_LOCATION=$(grep DerivedData ../output/build.log| grep '\.app'| sed -e 's/.*\(\/Users.*\.app\).*/\1/' | head -n 1)
 fi
 
 #How project name looks
