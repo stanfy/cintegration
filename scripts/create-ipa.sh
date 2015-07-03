@@ -143,16 +143,28 @@ then
 
    echo "[SIGN ] XCARCHIVE_LOCATION : ${XCARCHIVE_LOCATION}"
 
-   xcodebuild -exportArchive -archivePath ${XCARCHIVE_LOCATION} -exportPath "${IPA_ARCHIVE_LOCATION}" -exportWithOriginalSigningIdentity > /dev/null
-   if [ -n "${EXTENSIONS_DIRS}" ]
-   then
-   	echo "[INFO] Adding to ipa: ${EXTENSIONS_DIRS}"
-	mv "${IPA_ARCHIVE_LOCATION}" "${XCARCHIVE_LOCATION}/" 
-	pushd ${XCARCHIVE_LOCATION} > /dev/null
-                zip -r "${IPA_NAME}" ${EXTENSIONS_DIRS}
-        popd > /dev/null
-	cp "${XCARCHIVE_LOCATION}/${IPA_NAME}" "${IPA_ARCHIVE_LOCATION}"
+   ipaDir="$XCARCHIVE_LOCATION/../tmp"
+
+   mkdir -p "${ipaDir}/Payload"
+
+   pushd "${XCARCHIVE_LOCATION}/Products/Applications" > /dev/null
+        cp -r ./*.app "${ipaDir}/Payload"
+   popd > /dev/null
+
+   if [ -d "${XCARCHIVE_LOCATION}/SwiftSupport" ]; then
+        cp -r "${XCARCHIVE_LOCATION}/SwiftSupport" "${ipaDir}/"
    fi
+
+   if [ -d "${XCARCHIVE_LOCATION}/WatchKitSupport" ]; then
+        cp -r "${XCARCHIVE_LOCATION}/WatchKitSupport" "${ipaDir}/"
+   fi
+
+   pushd "${ipaDir}" > /dev/null
+        zip --symlinks  --recurse-paths "${IPA_ARCHIVE_LOCATION}" . > /dev/null
+   popd > /dev/null
+   rm -rf "${ipaDir}"
+
+   echo "[INFO] Created "${IPA_ARCHIVE_LOCATION}""
                                                                                                
 else
    echo "[SIGN ] PROFILE : ${PROFILE_LOCATION}"
