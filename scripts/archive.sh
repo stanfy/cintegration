@@ -44,9 +44,9 @@ case "$1" in
    store_path="${PROJECT_NAME}-${PROFILE_NAME}"
    ;;
 'exten')
-   download_file="${PROFILE_EXTENSIONS_NAME}"
+   download_file="$2"
    download_path="${PROFILE_HOME}"
-   store_path="${PROJECT_NAME}-${PROFILE_EXTENSIONS_NAME}"
+   store_path="${PROJECT_NAME}-$2"
    ;;
 esac   
 
@@ -138,12 +138,14 @@ fi
       
 
 #Searching provision for extension
-PROFILE_EXTEN_LOCATION="$PROFILE_HOME/${PROJECT_NAME}-${PROFILE_EXTENSIONS_NAME}"   
-if [ ! -f "${PROFILE_EXTEN_LOCATION}" ]; then
-   echo "[WARNING] Cannot find extension profile for specified build type ($1) : ( ${PROFILE_EXTEN_LOCATION})"
-   load_provision 'exten'
-fi
-      
+for extension in $PROFILE_EXTENSIONS
+do
+	PROFILE_EXTEN_LOCATION="$PROFILE_HOME/${PROJECT_NAME}-${extension}"   
+	if [ ! -f "${PROFILE_EXTEN_LOCATION}" ]; then
+   		echo "[WARNING] Cannot find extension profile for specified build type ($1) : ( ${PROFILE_EXTEN_LOCATION})"
+   		load_provision 'exten' "$extension"
+	fi
+done      
 
 profile_expiration=$(grep -A1 ExpirationDate -a "${PROFILE_HOME}/${FULL_PROFILE_NAME}" | tail -1 | sed -e 's/.*<date>\(.*\)<\/date>/\1/')
 if [ -z "$profile_expiration" ]
