@@ -254,6 +254,7 @@ if [ "${USER}" == "$CI_USER" ]; then
   echo "[INTEGRATOR] Unlocking iPhone keychain"
   security list-keychains -s "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
   security unlock-keychain -p "$KEYCHAIN_PASS" "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
+  security set-keychain-settings -lut 1800 "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
 fi
 
 
