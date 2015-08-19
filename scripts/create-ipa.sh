@@ -53,7 +53,7 @@ then
 
 app_list=$(grep DerivedData ../output/build.log)
 
-APPLICATION_ARCHIVE_LOCATION=$(cat  ../output/build.log| grep CODESIGNING_FOLDER_PATH| cut -d'=' -f2| head -n 1)
+APPLICATION_ARCHIVE_LOCATION=$(cat  ../output/build.log| grep CODESIGNING_FOLDER_PATH| cut -d'=' -f2| head -n 1 | sed 's/\"//g')
 
 if [ -z "$APPLICATION_ARCHIVE_LOCATION" ]
 then
