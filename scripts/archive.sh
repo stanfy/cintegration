@@ -330,21 +330,15 @@ then
 fi
 
 XCWORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" -print -quit)
+XCARCHIVE_LOCATION=`find . -maxdepth 2 -name "cintegration" -print -quit`/output/${PROJECT_NAME}.xcarchive
 
 if [ -n "$XCWORKSPACE" ]
 then
-	if [ "a${EXTENSIONS}" != "a1" ]
-	then
-       		echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -workspace ${XCWORKSPACE} -configuration ${CONFIGURATION} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" ${ADDITIONAL_BUILD_PARAMS} 
-        	xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -workspace ${XCWORKSPACE} -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" ${ADDITIONAL_BUILD_PARAMS} > cintegration/output/build.log 2>&1
-	else
-		XCARCHIVE_LOCATION=`find . -maxdepth 2 -name "cintegration" -print -quit`/output/${PROJECT_NAME}.xcarchive
-		echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -workspace ${XCWORKSPACE} -configuration ${CONFIGURATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" XCARCHIVE_LOCATION="${XCARCHIVE_LOCATION}" ${ADDITIONAL_BUILD_PARAMS} 
-		xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -workspace ${XCWORKSPACE} -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} -archivePath ${XCARCHIVE_LOCATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" ${ADDITIONAL_BUILD_PARAMS} > cintegration/output/build.log 2>&1
-	fi
+    	echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -workspace ${XCWORKSPACE} -configuration ${CONFIGURATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" XCARCHIVE_LOCATION="${XCARCHIVE_LOCATION}" ${ADDITIONAL_BUILD_PARAMS}
+    	xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -workspace ${XCWORKSPACE} -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} -archivePath ${XCARCHIVE_LOCATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" ${ADDITIONAL_BUILD_PARAMS} > cintegration/output/build.log 2>&1 
 else
-	echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" ${ADDITIONAL_BUILD_PARAMS} 
-	xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} ${TARGET_PARAMS} build CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" PROVISIONING_PROFILE="${PROFILE_UID}" ${ADDITIONAL_BUILD_PARAMS}  > cintegration/output/build.log 2>&1
+	echo [BUILD] Running xcodebuild -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" XCARCHIVE_LOCATION="${XCARCHIVE_LOCATION}" ${ADDITIONAL_BUILD_PARAMS}
+        xcodebuild ONLY_ACTIVE_ARCH=NO -verbose -scheme ${SCHEME_NAME} -sdk ${IPHONE_SDK} -configuration ${CONFIGURATION} -archivePath ${XCARCHIVE_LOCATION} archive CODE_SIGN_IDENTITY="${SIGNING_IDENTITY}" ${ADDITIONAL_BUILD_PARAMS} > cintegration/output/build.log 2>&1
 fi
 
 if [ "$?" -ne "0" ]; then

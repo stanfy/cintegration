@@ -48,35 +48,18 @@ PROFILE_LOCATION="$PROFILE_HOME/${FULL_PROFILE_NAME}"
 echo "[COPY ] ${PROFILE_LOCATION} --> ../output/${PROJECT_DEST_NAME}.mobileprovision"
 cp "${PROFILE_LOCATION}" "../output/${PROJECT_DEST_NAME}.mobileprovision"
 
-if [ "a${EXTENSIONS}" != "a1" ]
-then
+XCARCHIVE_LOCATION=`pwd`/../output/${PROJECT_NAME}.xcarchive
+APPLICATION_ARCHIVE_LOCATION=${XCARCHIVE_LOCATION}
 
 app_list=$(grep DerivedData ../output/build.log)
 
 APPLICATION_ARCHIVE_LOCATION=$(cat  ../output/build.log| grep CODESIGNING_FOLDER_PATH| cut -d'=' -f2| head -n 1 | sed 's/\"//g')
 
-if [ -z "$APPLICATION_ARCHIVE_LOCATION" ]
+if [ -d "${APPLICATION_ARCHIVE_LOCATION}/dSYMs" ]
 then
-	echo "[INFO] Looking for APPLICATION_ARCHIVE_LOCATION stage 2"
-	APPLICATION_ARCHIVE_LOCATION=$(python  scripts/derived.py ../output/build.log | sed 's/\([^\]\)\ /\1\\\ /g')
-fi
 
-if [ -z "$APPLICATION_ARCHIVE_LOCATION" ]
-then
-	echo "[INFO] Looking for APPLICATION_ARCHIVE_LOCATION stage 3"
-        APPLICATION_ARCHIVE_LOCATION=$(grep DerivedData ../output/build.log| grep '\.app'| sed -e 's/.*\(\/Users.*\.app\).*/\1/' | head -n 1)
-fi
-
-#How project name looks
-if [ -n "${PROJECT_APP_FILE_NAME}" ]; then
-  APPLICATION_ARCHIVE_LOCATION=$(dirname "${APPLICATION_ARCHIVE_LOCATION}")"/${PROJECT_APP_FILE_NAME}.app"
-  APPLICATION_ARCHIVE_LOCATION=$(echo "${APPLICATION_ARCHIVE_LOCATION}" | sed 's/\([^\]\)\ /\1\\\ /g')
-fi
-
-echo [DEBUG] APPLICATION_ARCHIVE_LOCATION = "${APPLICATION_ARCHIVE_LOCATION}"
-
-	DWARF_DSYM_FOLDER_PATH=$(dirname "${APPLICATION_ARCHIVE_LOCATION}")
-	DWARF_DSYM_FILE_NAME=$(ls ${DWARF_DSYM_FOLDER_PATH} | grep -i "\.dsym" | xargs )
+    DWARF_DSYM_FOLDER_PATH=$(dirname "${APPLICATION_ARCHIVE_LOCATION}")
+    DWARF_DSYM_FILE_NAME=$(ls ${DWARF_DSYM_FOLDER_PATH} | grep -i "\.dsym" | xargs )
     
     if [ -d "${DWARF_DSYM_FILE_NAME}" ]; then
         echo
@@ -136,40 +119,37 @@ export CODESIGN_ALLOCATE="${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Deve
 echo "[SIGN ] OUTPUT  : ${IPA_ARCHIVE_LOCATION}"
 echo "[SIGN ] SIGNER  : ${SIGNING_IDENTITY}"
 
+XCARCHIVE_LOCATION=`pwd`/../output/${PROJECT_NAME}.xcarchive
+APPLICATION_ARCHIVE_LOCATION=${XCARCHIVE_LOCATION}
+
+echo "[SIGN ] XCARCHIVE_LOCATION : ${XCARCHIVE_LOCATION}"
+
+ipaDir="$XCARCHIVE_LOCATION/../tmp"
+
+mkdir -p "${ipaDir}/Payload"
+
+pushd "${XCARCHIVE_LOCATION}/Products/Applications" > /dev/null
+	cp -r ./*.app "${ipaDir}/Payload"
+popd > /dev/null
+
 if [ "a${EXTENSIONS}" == "a1" ]
 then
-   XCARCHIVE_LOCATION=`pwd`/../output/${PROJECT_NAME}.xcarchive
-   APPLICATION_ARCHIVE_LOCATION=${XCARCHIVE_LOCATION}
+	if [ -d "${XCARCHIVE_LOCATION}/SwiftSupport" ]; then
+        	cp -r "${XCARCHIVE_LOCATION}/SwiftSupport" "${ipaDir}/"
+	fi
 
-   echo "[SIGN ] XCARCHIVE_LOCATION : ${XCARCHIVE_LOCATION}"
-
-   ipaDir="$XCARCHIVE_LOCATION/../tmp"
-
-   mkdir -p "${ipaDir}/Payload"
-
-   pushd "${XCARCHIVE_LOCATION}/Products/Applications" > /dev/null
-        cp -r ./*.app "${ipaDir}/Payload"
-   popd > /dev/null
-
-   if [ -d "${XCARCHIVE_LOCATION}/SwiftSupport" ]; then
-        cp -r "${XCARCHIVE_LOCATION}/SwiftSupport" "${ipaDir}/"
-   fi
-
-   if [ -d "${XCARCHIVE_LOCATION}/WatchKitSupport" ]; then
-        cp -r "${XCARCHIVE_LOCATION}/WatchKitSupport" "${ipaDir}/"
-   fi
-
-   pushd "${ipaDir}" > /dev/null
-        zip --symlinks  --recurse-paths "${IPA_ARCHIVE_LOCATION}" . > /dev/null
-   popd > /dev/null
-   rm -rf "${ipaDir}"
-
-   echo "[INFO] Created "${IPA_ARCHIVE_LOCATION}""
-                                                                                               
-else
-   echo "[SIGN ] PROFILE : ${PROFILE_LOCATION}"
-   /usr/bin/perl "${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Developer/usr/bin/PackageApplication" $2 "${APPLICATION_ARCHIVE_LOCATION}" -o "${IPA_ARCHIVE_LOCATION}" --sign "${SIGNING_IDENTITY}" --embed "${PROFILE_LOCATION}"
+	if [ -d "${XCARCHIVE_LOCATION}/WatchKitSupport" ]; then
+        	cp -r "${XCARCHIVE_LOCATION}/WatchKitSupport" "${ipaDir}/"
+	fi
 fi
+
+pushd "${ipaDir}" > /dev/null
+        zip --symlinks  --recurse-paths "${IPA_ARCHIVE_LOCATION}" . > /dev/null
+popd > /dev/null
+rm -rf "${ipaDir}"
+
+echo "[INFO] Created "${IPA_ARCHIVE_LOCATION}""
+                                                                                               
 
 
 if [ "$?" -ne "0" ]; then
