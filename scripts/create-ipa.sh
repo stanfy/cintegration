@@ -150,20 +150,6 @@ rm -rf "${ipaDir}"
 
 echo "[INFO] Created "${IPA_ARCHIVE_LOCATION}""
                                                                                                
-
-
-if [ "$?" -ne "0" ]; then
-  echo '[ERROR] Codesign failed'
-  echo
-  echo 'If you use Xcode version 6.0.1+ :'    
-  echo 'Click on your project > Targets > Select your target > Build Settings >'
-  echo 'Code Signing Resource Rules Path'
-  echo 'and add :'
-  echo '$(SDKROOT)/ResourceRules.plist'
-              
-  exit 1;
-fi
-
 echo "[SUCCESS]"
 
 echo 
