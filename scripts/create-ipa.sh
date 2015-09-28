@@ -54,7 +54,7 @@ APPLICATION_ARCHIVE_LOCATION=${XCARCHIVE_LOCATION}
 if [ -d "${APPLICATION_ARCHIVE_LOCATION}/dSYMs" ]
 then
 
-    DWARF_DSYM_FOLDER_PATH=$(dirname "${APPLICATION_ARCHIVE_LOCATION}")
+    DWARF_DSYM_FOLDER_PATH="${APPLICATION_ARCHIVE_LOCATION}/dSYMs"
     DWARF_DSYM_FILE_NAME=$(ls ${DWARF_DSYM_FOLDER_PATH} | grep -i "\.dsym" | xargs )
     
     if [ -d "${DWARF_DSYM_FILE_NAME}" ]; then
@@ -115,9 +115,6 @@ export CODESIGN_ALLOCATE="${DEVELOPER_LOCATION}/Platforms/iPhoneOS.platform/Deve
 echo "[SIGN ] OUTPUT  : ${IPA_ARCHIVE_LOCATION}"
 echo "[SIGN ] SIGNER  : ${SIGNING_IDENTITY}"
 
-XCARCHIVE_LOCATION=`pwd`/../output/${PROJECT_NAME}.xcarchive
-APPLICATION_ARCHIVE_LOCATION=${XCARCHIVE_LOCATION}
-
 echo "[SIGN ] XCARCHIVE_LOCATION : ${XCARCHIVE_LOCATION}"
 
 ipaDir="$XCARCHIVE_LOCATION/../tmp"
@@ -151,13 +148,7 @@ echo "[SUCCESS]"
 echo 
 echo -- DISTRIBUTION PLIST CREATION --
 
-#Getting Info.plist file location
-if [ "a${EXTENSIONS}" == "a1" ]
-then
-  INFO_PLIST_LOCATION=$(find ${APPLICATION_ARCHIVE_LOCATION}/Products/Applications -maxdepth 2 -name "Info.plist" -print -quit | head -n 1)
-else
-  INFO_PLIST_LOCATION="${APPLICATION_ARCHIVE_LOCATION}/Info.plist"
-fi
+INFO_PLIST_LOCATION=$(find ${APPLICATION_ARCHIVE_LOCATION}/Products/Applications -maxdepth 2 -name "Info.plist" -print -quit | head -n 1)
 
 echo [DEBUG] INFO_PLIST_LOCATION = ${INFO_PLIST_LOCATION}
 
