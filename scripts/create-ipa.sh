@@ -51,10 +51,6 @@ cp "${PROFILE_LOCATION}" "../output/${PROJECT_DEST_NAME}.mobileprovision"
 XCARCHIVE_LOCATION=`pwd`/../output/${PROJECT_NAME}.xcarchive
 APPLICATION_ARCHIVE_LOCATION=${XCARCHIVE_LOCATION}
 
-app_list=$(grep DerivedData ../output/build.log)
-
-APPLICATION_ARCHIVE_LOCATION=$(cat  ../output/build.log| grep CODESIGNING_FOLDER_PATH| cut -d'=' -f2| head -n 1 | sed 's/\"//g')
-
 if [ -d "${APPLICATION_ARCHIVE_LOCATION}/dSYMs" ]
 then
 
