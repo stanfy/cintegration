@@ -199,18 +199,23 @@ then
     echo "[INFO] Git was stashed"
 fi       
 done
+
 if [ -n "$PlistInfo" ]
 then
 	if [ "a${BUNDLE_VERSION_CHANGE}" == "a1" ]
 	then
 
-		if [ "a${APPSTORE_UPLOAD_NEEDED}" == "a1" ]; then
-			/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${BUILD_NUMBER}" "$PlistInfo"
-			echo "[INFO] CFBundleVersion <${BUILD_NUMBER}> was changed in $PlistInfo"
-		else
-			/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${BUILD_NUMBER}.${SVN_REVISION}" "$PlistInfo"
-			echo "[INFO] CFBundleVersion <${BUILD_NUMBER}.${SVN_REVISION}> was changed in $PlistInfo"
-		fi	
+		if [ -z "$BUNDLEVERSION" ]
+	        then
+	        	if [ "a${APPSTORE_UPLOAD_NEEDED}" == "a1" ]; then
+	                	BUNDLEVERSION="${BUILD_NUMBER}"
+	                else
+	                	BUNDLEVERSION="${BUILD_NUMBER}.${SVN_REVISION}"
+	                fi
+	        fi
+	        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${BUNDLEVERSION}" "$PlistInfo"
+	        echo "[INFO] CFBundleVersion <${BUNDLEVERSION}> was changed in $PlistInfo"
+	                                                                                                                                                                                                        
 	fi
 	
 	if [ -n "$BUNDLEIDENTIFIER" ]
