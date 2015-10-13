@@ -44,7 +44,10 @@ fi
 
 
 # install pods
-"${DIR}/scripts/pods.sh"
+if [ "$SKIP_PODS_INSTALL" != "true" ]
+then
+        "${DIR}/scripts/pods.sh"
+fi
 
 # going to cintegration / bin directory
 cd "${DIR}"
