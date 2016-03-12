@@ -169,9 +169,9 @@ if [ "a${HOCKEYAPP_UPLOAD_NEEDED}" == "a1" ]; then
 	    DSYM_FILE=$(find ../output -d 1 -iname '*.zip'| head -n 1)
 	    if [ -n "$DSYM_FILE" ]
 	    then
-	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -F dsym=@"${DSYM_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="Build uploaded automatically from Jenkins." -F release_type=0 -F notes_type=0  -F status=2 -F notify=1
+	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -F dsym=@"${DSYM_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="Build uploaded automatically from Jenkins." -F release_type=0 -F notes_type=0  -F status=2 -F notify=${HOCKEYAPP_NOTIFY_VALUE} 
 	    else
-	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="Build uploaded automatically from Jenkins." -F release_type=0 -F notes_type=0  -F status=2 -F notify=1
+	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="Build uploaded automatically from Jenkins." -F release_type=0 -F notes_type=0  -F status=2 -F notify=${HOCKEYAPP_NOTIFY_VALUE} 
 	    fi
 	    echo
                                       
