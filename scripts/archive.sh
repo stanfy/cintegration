@@ -161,7 +161,7 @@ then
 fi
 
 
-if [ -n "$FORCE_PROVISION_FETCH" ]
+if [ "a$FORCE_PROVISION_FETCH" == "atrue" ]
 then
   echo "[INFO] force fetch ${PROFILE_NAME}"
   load_provision 'prov'
