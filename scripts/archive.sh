@@ -160,6 +160,12 @@ then
   load_provision 'prov'
 fi
 
+
+if [ -n "$FORCE_PROVISION_FETCH" ]
+then
+  echo "[INFO] force fetch ${PROFILE_NAME}"
+  load_provision 'prov'
+fi
   
 PROFILE_UID=`grep -E "[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+-[[:alnum:]]+" -ao "${PROFILE_LOCATION}"`
 
