@@ -21,6 +21,8 @@ fi
 
 source ${CFG_FILE}
 
+CI_MESSAGE="Build uploaded automatically from Jenkins."
+
 DEV_CFG_FILE=../configs/$1-dev.cfg
 if [ -f ${DEV_CFG_FILE} ]; then
 echo Overriding ${CFG_FILE} with ${DEV_CFG_FILE}
@@ -144,7 +146,10 @@ if [ "a${TESTFLIGHT_UPLOAD_NEEDED}" == "a1" ]; then
 	IPA_FILE=$(find ../output -d 1 -iname '*.ipa')
 	#echo "IPA_FILE  $IPA_FILE"
 	
-	/usr/bin/curl "http://testflightapp.com/api/builds.json" -F file=@"${IPA_FILE}" -F api_token="${API_TOKEN}" -F team_token="${TEAM_TOKEN}" -F notes="Build uploaded automatically from Jenkins." -F notify=True -F distribution_lists="${DIST_LIST}"
+    if [ -z $TESTFLIGHT_CI_MESSAGE ]; then
+        TESTFLIGHT_CI_MESSAGE="${CI_MESSAGE}"
+    fi
+	/usr/bin/curl "http://testflightapp.com/api/builds.json" -F file=@"${IPA_FILE}" -F api_token="${API_TOKEN}" -F team_token="${TEAM_TOKEN}" -F notes="${TESTFLIGHT_CI_MESSAGE}" -F notify=True -F distribution_lists="${DIST_LIST}"
 	echo
 	
 	if [ "$?" -ne "0" ]; then
@@ -167,11 +172,14 @@ if [ "a${HOCKEYAPP_UPLOAD_NEEDED}" == "a1" ]; then
 	    DSYM_FILE=''
 	    IPA_FILE=$(find ../output -d 1 -iname '*.ipa'| head -n 1)
 	    DSYM_FILE=$(find ../output -d 1 -iname '*.zip'| head -n 1)
+        if [ -z $HOCKEYAPP_CI_MESSAGE ]; then
+            HOCKEYAPP_CI_MESSAGE="${CI_MESSAGE}"
+        fi
 	    if [ -n "$DSYM_FILE" ]
 	    then
-	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -F dsym=@"${DSYM_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="Build uploaded automatically from Jenkins." -F release_type=0 -F notes_type=0  -F status=2 -F notify=${HOCKEYAPP_NOTIFY_VALUE} 
+	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -F dsym=@"${DSYM_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="${HOCKEYAPP_CI_MESSAGE}" -F release_type=0 -F notes_type=0  -F status=2 -F notify=${HOCKEYAPP_NOTIFY_VALUE} 
 	    else
-	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="Build uploaded automatically from Jenkins." -F release_type=0 -F notes_type=0  -F status=2 -F notify=${HOCKEYAPP_NOTIFY_VALUE} 
+	    	/usr/bin/curl "https://rink.hockeyapp.net/api/2/apps/upload" -F ipa=@"${IPA_FILE}" -H "X-HockeyAppToken: ${API_TOKEN_HOCKEYAPP}" -F notes="${HOCKEYAPP_CI_MESSAGE}" -F release_type=0 -F notes_type=0  -F status=2 -F notify=${HOCKEYAPP_NOTIFY_VALUE} 
 	    fi
 	    echo
                                       
