@@ -49,6 +49,10 @@ $ git submodule add  https://github.com/stanfy/cintegration.git ios-project/cint
 - Open **Keychain access** and add a corresponding certificate with a private key for app signing
 - Create a folder **$HOME/keys** and put there mobileprovision. For example: create **/User/jenkins/keys** and put there **dev.mobileprovision**
 - Create and edit minimal **base.cfg**
+- If you want to use icon modification then install:
+```bash
+brew install ghostscript imagemagick
+```
 
 ```bash
 #!/bin/sh

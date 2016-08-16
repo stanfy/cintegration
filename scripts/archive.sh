@@ -212,6 +212,7 @@ if [ -n "$IconDir" ]
 then
         ICONS=$(ls $IconDir/*.png)
 fi
+        
 
 if [ -n "$PlistInfo" ]
 then
@@ -282,17 +283,11 @@ then
   ICONS_SIZE_ARR=''
   while read line
   do
-  	ICON=''
-  	ICON=$(find . -name "$line*" | head -n 1) 	
-  	if [ -n "$ICON" ]
-  	then
-
-           SIZE_ICONS=''
-           SIZE_ICONS=$(/usr/bin/stat -f "%z %N" "$ICON" 2> /dev/null)
-           ICONS_SIZE_ARR=$(printf "%s\n%s" "$ICONS_SIZE_ARR" "$SIZE_ICONS")
-           ICONS_ARR=$(printf "%s\n%s" "$ICONS_ARR" "$ICON")
-  	fi
-
+ 	ICON=$line
+        SIZE_ICONS=''
+        SIZE_ICONS=$(/usr/bin/stat -f "%z %N" "$ICON" 2> /dev/null)
+        ICONS_SIZE_ARR=$(printf "%s\n%s" "$ICONS_SIZE_ARR" "$SIZE_ICONS")
+        ICONS_ARR=$(printf "%s\n%s" "$ICONS_ARR" "$ICON")
   done <<< "$ICONS"
 
   CHECK_FOR_CLIENT_BUILD=$(echo "$1" | grep -i "client")
