@@ -206,6 +206,13 @@ then
 fi       
 done
 
+IconDir=''
+IconDir=$(find . -iname 'appicon.appiconsets')
+if [ -n "$IconDir" ]
+then
+        ICONS=$(ls $IconDir/*.png)
+fi
+
 if [ -n "$PlistInfo" ]
 then
 	if [ "a${BUNDLE_VERSION_CHANGE}" == "a1" ]
@@ -267,13 +274,6 @@ if [ "${USER}" == "$CI_USER" ]; then
   security set-keychain-settings -lut 1800 "/Users/${CI_USER}/Library/Keychains/${KEYCHAIN_NAME}.keychain"
 fi
 
-IconDir=''
-IconDir=$(find . -iname 'appicon.appiconsets')
-if [ -n "$IconDir" ]
-then
-	ICONS=$(ls $IconDir/*.png)
-fi
-                                           
 #get icons
 CHECK_FOR_CLIENT_BUILD=$(echo "$1" | grep -i "client")
 if [ -n "$ICONS" ]
