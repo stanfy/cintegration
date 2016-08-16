@@ -207,7 +207,7 @@ fi
 done
 
 IconDir=''
-IconDir=$(find . -iname 'appicon.appiconsets')
+IconDir=$(find . -iname 'appicon.appiconset')
 if [ -n "$IconDir" ]
 then
         ICONS=$(ls $IconDir/*.png)
